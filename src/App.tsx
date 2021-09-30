@@ -1,11 +1,21 @@
 import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { AuthPage } from 'src/pages';
 
-function App() {
+const authenticated = false; 
+
+const App: React.FC = () => {
   return (
-    <div className="App">
-      
-    </div>
+    <>
+      {authenticated ? (
+        <Switch>
+          <Route exact path="/dashboard" />
+        </Switch>
+      ) : (
+        <AuthPage />
+      )}
+    </>
   );
-}
+};
 
 export default App;
