@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Styles from './styled';
+import * as Styles from './ButtonStyles';
 import styled from 'styled-components';
 
 interface ButtonProps {
@@ -8,6 +8,7 @@ interface ButtonProps {
   variant?: 'FilledButton' | 'OutlinedButton' | 'TransparentButton';
   loading?: boolean;
   disabled?: boolean;
+  onClick?: () => void;
 }
 
 interface StyledButtonProps {
@@ -24,11 +25,13 @@ const Button: React.FC<ButtonProps> = ({
   variant = 'FilledButton',
   loading = false,
   disabled = false,
+  onClick,
 }) => (
   <StyledButton
     type={type}
-    disabled={disabled}
+    disabled={disabled || loading}
     variant={variant}
+    onClick={onClick}
   >
     {loading ? 'loading...' : text }
   </StyledButton>

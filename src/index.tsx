@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react'
 import { createGlobalStyle } from 'styled-components';
-import { Normalize } from 'styled-normalize';
+import { normalize } from 'styled-normalize';
 import App from './App';
-import GlobalFonts from 'src/assets/fonts';
+import store, { persistor } from 'src/state/store';
 
 const GlobalStyles = createGlobalStyle`
+  ${normalize}
+
   * {
     box-sizing: border-box;
     font-family: 'Rubik', sans-serif;
@@ -23,12 +27,14 @@ const GlobalStyles = createGlobalStyle`
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Normalize />
-      <GlobalFonts />
-      <GlobalStyles />
-      <App />
-    </BrowserRouter>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <GlobalStyles />
+          <App />
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -5,9 +5,9 @@ const emailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 const validators = {
   required: (value: string) => (typeof value !== 'string') ? 'Required' : (value.trim() ? undefined : 'Required'),
 
-  email: (value: string) => value.match(emailPattern) ? undefined : 'Incorrect email format',
+  validEmail: (value: string) => value.match(emailPattern) ? undefined : 'Incorrect email format',
 
-  password: (value: string) => (value.length < 6) ? 'Minimum password length is 6 symbols' : undefined,
+  passwordLength: (value: string) => (value.length < 6) ? 'Minimum password length is 6 symbols' : undefined,
 };
 
 export const composeValidators = (...validators: FieldValidator<any>[]) => (value: any) => 

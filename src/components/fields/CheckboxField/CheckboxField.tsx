@@ -1,7 +1,25 @@
+import React from 'react';
+import { FieldRenderProps } from 'react-final-form';
 import styled from 'styled-components';
 import { checkSvg } from 'src/assets/icons';
 
-export const CheckboxLabel = styled.label`
+interface CheckboxFieldProps extends FieldRenderProps<string> {
+  label?: string;
+  disabled?: boolean;
+  checked: boolean;
+}
+
+const CheckboxField: React.FC<CheckboxFieldProps> = ({ input, label, disabled, checked }) => {
+  return (
+    <CheckboxLabel>
+      {label}
+      <HiddenInput {...input} disabled={disabled} />
+      <CheckboxMark checked={input.checked} />
+    </CheckboxLabel>
+  );
+};
+
+const CheckboxLabel = styled.label`
   display: block;
   position: relative;
   padding-left: 31px;
@@ -13,7 +31,7 @@ export const CheckboxLabel = styled.label`
   cursor: pointer;
 `;
 
-export const HiddenInput = styled.input`
+const HiddenInput = styled.input`
   position: absolute;
   opacity: 0;
   z-index: -3;
@@ -21,7 +39,7 @@ export const HiddenInput = styled.input`
   width: 0;
 `;
 
-export const CheckboxMark = styled.span<{ checked?: boolean }>`
+const CheckboxMark = styled.span<{ checked?: boolean }>`
   position: absolute;
   top: -1px;
   left: 0;
@@ -44,3 +62,5 @@ export const CheckboxMark = styled.span<{ checked?: boolean }>`
     height: 11px;
   }
 `;
+
+export default CheckboxField;
