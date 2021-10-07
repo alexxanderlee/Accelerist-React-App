@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse, AxiosError } from 'axios';
 import { userApi } from 'src/utils/api';
-import { FetchError, UserData } from 'src/interfaces';
+import { FetchError, IUser } from 'src/interfaces';
 
 export interface AuthRequestAttributes {
   email: string;
@@ -14,26 +14,26 @@ export interface ChangePasswordAttributes {
 }
 
 export const loginUser = createAsyncThunk<
-  UserData,
+  { user: IUser, token: string },
   AuthRequestAttributes,
   { rejectValue: FetchError }
 >('user/login', async ({ email, password }, thunkAPI) => {
   try {
     const response: AxiosResponse = await userApi.login(email, password);
-    return normalizeUserData(response);
+    return normalizeData(response);
   } catch (error) {
     return thunkAPI.rejectWithValue(handleError(error as AxiosError));
   }
 });
 
 export const signupUser = createAsyncThunk<
-  UserData,
+  { user: IUser, token: string },
   AuthRequestAttributes,
   { rejectValue: FetchError }
 >('user/signup', async ({ email, password }, thunkAPI) => {
   try {
     const response: AxiosResponse = await userApi.signup(email, password);
-    return normalizeUserData(response);
+    return normalizeData(response);
   } catch (error) {
     return thunkAPI.rejectWithValue(handleError(error as AxiosError));
   }
@@ -66,9 +66,14 @@ export const changePassword = createAsyncThunk<
   }
 );
 
-const normalizeUserData = (res: AxiosResponse): UserData => ({
-  id: res.data.user.id,
-  email: res.data.user.email,
+const normalizeData = (res: AxiosResponse): { user: IUser, token: string } => ({
+  user: {
+    id: res.data.user.id,
+    email: res.data.user.email,
+    firstName: res.data.user.firstName,
+    lastName: res.data.user.lastName,
+    role: res.data.user.role,
+  },
   token: res.data.accessToken,
 });
 

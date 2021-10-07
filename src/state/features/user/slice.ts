@@ -1,20 +1,22 @@
 import { createSlice, AsyncThunk, AnyAction } from '@reduxjs/toolkit';
-import { FetchError, UserData } from 'src/interfaces';
+import { FetchError, IUser } from 'src/interfaces';
 import { AuthRequestAttributes, loginUser, sendMail, signupUser, changePassword } from './thunks';
 
 interface UserState {
-  data: UserData | null;
+  data: IUser | null;
+  token: string | null;
   error: FetchError | null;
   loading: boolean;
 }
 
 const initialState: UserState = {
   data: null,
+  token: null,
   loading: false,
   error: null,
 };
 
-type AuthAsyncThunk = AsyncThunk<UserData, AuthRequestAttributes, { rejectValue: FetchError }>;
+type AuthAsyncThunk = AsyncThunk<{ user: IUser, token: string }, AuthRequestAttributes, { rejectValue: FetchError }>;
 type PendingAction = ReturnType<AuthAsyncThunk['pending']>;
 type FulfilledAction = ReturnType<AuthAsyncThunk['fulfilled']>;
 type RejectedAction = ReturnType<AuthAsyncThunk['rejected']>;
@@ -37,6 +39,7 @@ const userSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.data = null;
+      state.token = null;
     },
     clearError: (state) => {
       state.error = null;
@@ -48,7 +51,9 @@ const userSlice = createSlice({
       state.error = null;
     });
     builder.addMatcher(isFulfilledAction, (state, action) => {
-      state.data = action.payload;
+      const { user, token } = action.payload;
+      state.data = user;
+      state.token = token;
       state.loading = false;
     });
     builder.addMatcher(isRejectedAction, (state, action) => {

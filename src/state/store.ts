@@ -15,10 +15,17 @@ import { userReducer } from './features';
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['user'],
 };
 
+const userConfig = {
+  key: 'user',
+  storage,
+  blacklist: ['loading', 'error'],
+}
+
 const rootReducer = combineReducers({
-  user: userReducer,
+  user: persistReducer(userConfig, userReducer),
 });
 
 const store = configureStore({
