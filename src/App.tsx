@@ -6,11 +6,11 @@ import { useAppSelector } from 'src/state/hooks';
 import { userSelectors } from 'src/state/features/user';
 
 const App: React.FC = () => {
-  const token = useAppSelector(userSelectors.getToken);
+  const isAuthenticated = useAppSelector(userSelectors.isAuthenticated);
 
   return (
     <>
-      {token ? (
+      {isAuthenticated ? (
         <Switch>
           <Route exact path="/dashboard" component={Dashboard} />
           <Redirect to="/dashboard" />

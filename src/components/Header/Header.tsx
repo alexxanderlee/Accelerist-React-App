@@ -41,9 +41,6 @@ const Header: React.FC<HeaderProps> = (props) => {
               <StyledNavLink to="/dashboard">Dashboard</StyledNavLink>
             </ListItem>
             <ListItem>
-              <StyledNavLink to="!#">Audience</StyledNavLink>
-            </ListItem>
-            <ListItem>
               <StyledNavLink to="!#">Pricing</StyledNavLink>
             </ListItem>
             <ListItem>
@@ -65,7 +62,7 @@ const Header: React.FC<HeaderProps> = (props) => {
           <Avatar>
             <UserIcon src={userSvg} />
           </Avatar>
-          <Username>{user.email}</Username>
+          {user && <Username>{user.email}</Username>}
           <Dropdown hidden={dropdownHidden}>
             <DropdownItem>Profile</DropdownItem>
             <DropdownItem>User Profile</DropdownItem>
@@ -120,7 +117,7 @@ const ListItem = styled.li`
   }
 `;
 
-const StyledNavLink = styled(NavLink)<{ active?: boolean }>`
+const StyledNavLink = styled(NavLink)`
   text-decoration: none;
   white-space: nowrap;
   font-family: 'Rubik', sans-serif;

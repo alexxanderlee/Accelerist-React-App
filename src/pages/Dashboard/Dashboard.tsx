@@ -7,17 +7,16 @@ import {
   ProspectsList,
   FavouritesList,
 } from 'src/components';
-import { IProspect, ICompany, ITeam, ILastLogin } from 'src/interfaces';
-
-interface DashboardProps {
-}
+import { IProspect, ICompany } from 'src/interfaces';
+import { useAppDispatch } from 'src/state/hooks';
+import { teamActions } from 'src/state/features/team';
 
 const prospects: IProspect[] = [
   {
     id: '1',
     name: 'Prospect 1',
     filters: {
-      'gender': 'male',
+      gender: 'male',
     },
     prospectsAvailable: 23,
     lastAuthor: {
@@ -34,7 +33,7 @@ const prospects: IProspect[] = [
     id: '2',
     name: 'Prospect 2',
     filters: {
-      'gender': 'female',
+      gender: 'female',
     },
     prospectsAvailable: 44,
     lastAuthor: {
@@ -71,38 +70,13 @@ const favoutrites: ICompany[] = [
   },
 ];
 
-const team: ITeam = {
-  id: '1',
-  searchCount: 42,
-  pitchCount: 13,
-};
+const Dashboard: React.FC = () => {
+  const dispatch = useAppDispatch();
 
-const lastLogins: ILastLogin[] = [
-  {
-    id: '474de219-28b8-4e5d-ba12-92380624b976',
-    loggedInAt: '2021-10-07T14:52:00.483Z',
-    user: {
-      id: 'eb893b0e-ce28-4392-a824-4a3ff9c36e79',
-      email: 'user@example.com',
-      firstName: 'Test',
-      lastName: 'Test',
-      role: 'Owner',
-    },
-  },
-  {
-    id: '22d5a106-0137-4cc0-b8ab-3142b96d3725',
-    loggedInAt: '2021-10-07T14:38:57.443Z',
-    user: {
-      id: 'eb893b0e-ce28-4392-a824-4a3ff9c36e79',
-      email: 'user@example.com',
-      firstName: 'Test',
-      lastName: 'Test',
-      role: 'Owner',
-    },
-  },
-];
-
-const Dashboard: React.FC<DashboardProps> = (props) => {
+  React.useEffect(() => {
+    dispatch(teamActions.getTeam());
+    dispatch(teamActions.getLastLogins());
+  }, []);
 
   return (
     <ContentWrapper pageTitle="Dashboard">
@@ -125,7 +99,7 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
           <ItemHeader>
             <ItemTitle>Reports</ItemTitle>
           </ItemHeader>
-          <ReportsBlock team={team} lastLogins={lastLogins} />
+          <ReportsBlock/>
         </GridItem>
       </Grid>
     </ContentWrapper>

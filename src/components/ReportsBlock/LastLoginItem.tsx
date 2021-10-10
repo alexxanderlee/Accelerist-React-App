@@ -9,7 +9,7 @@ interface LastLoginItemProps {
 
 const LastLoginItem: React.FC<LastLoginItemProps> = ({ lastLogin: { loggedInAt, user } }) => {
   const firstChar = user.email[0].toUpperCase();
-  const date = dayjs(loggedInAt).format('D MMM YYYY');
+  const date = dayjs(loggedInAt).format('D MMM YYYY - HH:mm');
 
   return (
     <Root>

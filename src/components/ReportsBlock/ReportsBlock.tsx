@@ -2,13 +2,34 @@ import React from 'react';
 import styled from 'styled-components';
 import LastLoginItem from './LastLoginItem';
 import { ITeam, ILastLogin } from 'src/interfaces';
+import { useAppSelector } from 'src/state/hooks';
+import { teamSelectors } from 'src/state/features/team';
+import { Loader, ErrorMessageBox } from 'src/components/ui';
 
-interface ReportsBlockProps {
-  team: ITeam;
-  lastLogins: ILastLogin[];
-}
+const ReportsBlock: React.FC = () => {
+  const team: ITeam = useAppSelector(teamSelectors.getTeam);
+  const lastLogins: ILastLogin[] = useAppSelector(teamSelectors.getLastLogins);
+  const isLoading = useAppSelector(teamSelectors.isLoading);
+  const error = useAppSelector(teamSelectors.getError);
 
-const ReportsBlock: React.FC<ReportsBlockProps> = ({ team, lastLogins }) => {
+  if (error) {
+    return (
+      <Root>
+        <ErrorMessageBox error={error.error} message={error.message} />
+      </Root>
+    );
+  }
+
+  if (!team || isLoading) {
+    return (
+      <Root>
+        <LoaderWrapper>
+          <Loader />
+        </LoaderWrapper>
+      </Root>
+    );
+  }
+
   return (
     <Root>
       <Header>
@@ -48,6 +69,13 @@ const Root = styled.div`
   padding: 24px;
   background-color: #FFFFFF;
   border-radius: 6px;
+`;
+
+const LoaderWrapper = styled.div`
+  min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const SectionTitle = styled.p`

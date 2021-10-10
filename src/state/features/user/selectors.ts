@@ -1,8 +1,8 @@
 import { RootState } from 'src/state/types';
 
-export const getUserData = (state: RootState) => state.user.data;
+export const getUserData = (state: RootState) => state.user.user;
 
-export const getToken = (state: RootState) => state.user.token;
+export const isAuthenticated = (state: RootState) => state.user.isAuthenticated;
 
 export const isLoading = (state: RootState) => state.user.loading;
 

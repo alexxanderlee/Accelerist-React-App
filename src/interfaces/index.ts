@@ -1,5 +1,6 @@
+export type SortType = 'alphabet' | 'last-activity' | 'available';
+
 export interface FetchError {
-  statusCode?: number;
   error: string;
   message: string;
 }
@@ -12,8 +13,30 @@ export interface IUser {
   role: string,
 }
 
-interface IFilters {
-  [key: string]: string;
+export interface IFilters {
+  q?: string,
+  deleteIds?: string[],
+  industry?: string[],
+  location?: string[],
+  scope?: string,
+  totalAnnualContributors?: string,
+  revenueMin?: string,
+  revenueMax?: string,
+  csrFocusIds?: number[],
+  affinities?: string[],
+  gender?: 'male' | 'female' | 'both',
+  ethnicities?: string[],
+  ageRanges?: string[],
+  income?: string[],
+  sdgGoals?: string[]
+}
+
+export interface SavedListMeta {
+  totalItems?: number;
+  itemCount?: number;
+  itemsPerPage?: string;
+  totalPages?: number;
+  currentPage?: string;
 }
 
 export interface IProspect {
