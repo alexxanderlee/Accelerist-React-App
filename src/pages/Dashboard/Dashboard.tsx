@@ -7,46 +7,10 @@ import {
   ProspectsList,
   FavouritesList,
 } from 'src/components';
-import { IProspect, ICompany } from 'src/interfaces';
+import { ICompany } from 'src/interfaces';
 import { useAppDispatch } from 'src/state/hooks';
 import { teamActions } from 'src/state/features/team';
-
-const prospects: IProspect[] = [
-  {
-    id: '1',
-    name: 'Prospect 1',
-    filters: {
-      gender: 'male',
-    },
-    prospectsAvailable: 23,
-    lastAuthor: {
-      id: 'eb893b0e-ce28-4392-a824-4a3ff9c36e79',
-      email: 'user@example.com',
-      firstName: 'Test',
-      lastName: 'Test',
-      role: 'Owner',
-    },
-    createdAt: '2021-07-23T08:14:15.185Z',
-    updatedAt: '2021-07-23T08:14:15.185Z',
-  },
-  {
-    id: '2',
-    name: 'Prospect 2',
-    filters: {
-      gender: 'female',
-    },
-    prospectsAvailable: 44,
-    lastAuthor: {
-      id: 'eb893b0e-ce28-4392-a824-4a3ff9c36e79',
-      email: 'user@example.com',
-      firstName: 'Test',
-      lastName: 'Test',
-      role: 'Owner',
-    },
-    createdAt: '2021-07-23T08:14:15.185Z',
-    updatedAt: '2021-07-23T08:14:15.185Z',
-  },
-];
+import { savedListActions } from 'src/state/features/savedList';
 
 const favoutrites: ICompany[] = [
   {
@@ -76,6 +40,7 @@ const Dashboard: React.FC = () => {
   React.useEffect(() => {
     dispatch(teamActions.getTeam());
     dispatch(teamActions.getLastLogins());
+    dispatch(savedListActions.getSavedLists({ page: 1, limit: 2, sort: 'alphabet' }));
   }, []);
 
   return (
@@ -84,14 +49,14 @@ const Dashboard: React.FC = () => {
         <GridTopItem>
           <ItemHeader>
             <ItemTitle>Prospecting Sessions</ItemTitle>
-            <ItemLink to="!#">see more</ItemLink>
+            <ItemLink to="/prospects">see more</ItemLink>
           </ItemHeader>
-          <ProspectsList prospects={prospects} />
+          <ProspectsList />
         </GridTopItem>
         <GridItem>
           <ItemHeader>
             <ItemTitle>Favourites</ItemTitle>
-            <ItemLink to="!#">see more</ItemLink>
+            <ItemLink to="/favourites">see more</ItemLink>
           </ItemHeader>
           <FavouritesList favourites={favoutrites} />
         </GridItem>

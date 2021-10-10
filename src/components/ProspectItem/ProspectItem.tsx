@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import dayjs from 'dayjs';
 import { IProspect } from 'src/interfaces';
+import formatFilters from 'src/utils/filterFormatter';
 
 interface ProspectItemProps {
   prospect: IProspect;
@@ -14,6 +15,7 @@ const ProspectItem: React.FC<ProspectItemProps> = ({
 }) => {
   const lastActivity = dayjs(updatedAt).format('D MMM YYYY');
   const firstChar = lastAuthor.email[0].toUpperCase();
+  const formattedFilters = formatFilters(filters);
 
   return (
     <Wrapper>
@@ -26,9 +28,7 @@ const ProspectItem: React.FC<ProspectItemProps> = ({
         <div>
           <Text>Filters</Text>
           <FiltersList>
-            {Object.entries(filters).map(
-              ([key, value], index) => <FilterItem key={index}>{key}: {value}</FilterItem>
-            )}
+            {formattedFilters.map((item, index) => <FilterItem key={index}>{item}</FilterItem>)}
           </FiltersList>
         </div>
       )}

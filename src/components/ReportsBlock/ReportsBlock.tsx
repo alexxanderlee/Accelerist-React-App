@@ -72,7 +72,7 @@ const Root = styled.div`
 `;
 
 const LoaderWrapper = styled.div`
-  min-height: 200px;
+  padding: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
