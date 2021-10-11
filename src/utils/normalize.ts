@@ -1,5 +1,5 @@
 import { AxiosResponse, AxiosError } from 'axios';
-import { FetchError, IUser, ITeam, ILastLogin } from 'src/interfaces';
+import { FetchError, IUser } from 'src/interfaces';
 
 const normalize = {
   error: (error: AxiosError): FetchError => error.response

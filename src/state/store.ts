@@ -10,12 +10,12 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { userReducer, teamReducer, savedListReducer } from './features';
+import { userReducer, teamReducer, savedListReducer, companiesReducer } from './features';
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['user', 'team', 'savedList'],
+  blacklist: ['user', 'team', 'savedList', 'companies'],
 };
 
 const userConfig = {
@@ -28,6 +28,7 @@ const rootReducer = combineReducers({
   user: persistReducer(userConfig, userReducer),
   team: teamReducer,
   savedList: savedListReducer,
+  companies: companiesReducer,
 });
 
 const store = configureStore({

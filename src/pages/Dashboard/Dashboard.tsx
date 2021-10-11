@@ -7,32 +7,10 @@ import {
   ProspectsList,
   FavouritesList,
 } from 'src/components';
-import { ICompany } from 'src/interfaces';
 import { useAppDispatch } from 'src/state/hooks';
 import { teamActions } from 'src/state/features/team';
 import { savedListActions } from 'src/state/features/savedList';
-
-const favoutrites: ICompany[] = [
-  {
-    id: '1',
-    name: 'NASA',
-    score: 12,
-    crsFocus: ['Health', 'Animals', 'Education'],
-  },
-  {
-    id: '2',
-    name: 'Samsung',
-    logo: 'https://www.pictureblast.co.uk/wp-content/uploads/2016/02/Samsung-logo-2017-square.png',
-    score: 43,
-    crsFocus: ['Health', 'Animals', 'Education'],
-  },
-  {
-    id: '3',
-    name: 'Alfa Bank',
-    score: 15,
-    crsFocus: [],
-  },
-];
+import { companiesActions } from 'src/state/features/companies';
 
 const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -41,6 +19,7 @@ const Dashboard: React.FC = () => {
     dispatch(teamActions.getTeam());
     dispatch(teamActions.getLastLogins());
     dispatch(savedListActions.getSavedLists({ page: 1, limit: 2, sort: 'alphabet' }));
+    dispatch(companiesActions.getFavouriteCompanies({ page: 1, limit: 6 }));
   }, []);
 
   return (
@@ -58,7 +37,7 @@ const Dashboard: React.FC = () => {
             <ItemTitle>Favourites</ItemTitle>
             <ItemLink to="/favourites">see more</ItemLink>
           </ItemHeader>
-          <FavouritesList favourites={favoutrites} />
+          <FavouritesList />
         </GridItem>
         <GridItem>
           <ItemHeader>

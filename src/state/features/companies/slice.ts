@@ -1,11 +1,13 @@
 import { createSlice, AsyncThunk, AnyAction } from '@reduxjs/toolkit';
-import { IProspect, MetaData, FetchError } from 'src/interfaces';
-import { getSavedLists } from './thunks';
+import { ICompany, MetaData, FetchError } from 'src/interfaces';
+import { getFavouriteCompanies } from './thunks';
 import { userActions } from 'src/state/features/user';
 
-interface SavedListState {
-  items: IProspect[];
-  meta: MetaData;
+interface CompaniesState {
+  favourites: {
+    items: ICompany[];
+    meta: MetaData;
+  };
   loading: boolean;
   error: FetchError | null;
 }
@@ -15,33 +17,36 @@ type PendingAction = ReturnType<SavedListAsyncThunk['pending']>;
 type RejectedAction = ReturnType<SavedListAsyncThunk['rejected']>;
 
 function isPendingAction(action: AnyAction): action is PendingAction {
-  return action.type.startsWith('savedList/') && action.type.endsWith('/pending');
+  return action.type.startsWith('companies/') && action.type.endsWith('/pending');
 }
 
 function isRejectedAction(action: AnyAction): action is RejectedAction {
-  return action.type.startsWith('savedList/') && action.type.endsWith('/rejected');
+  return action.type.startsWith('companies/') && action.type.endsWith('/rejected');
 }
 
-const initialState: SavedListState = {
-  items: [],
-  meta: {},
+const initialState: CompaniesState = {
+  favourites: {
+    items: [],
+    meta: {},
+  },
   loading: false,
-  error: null,
+    error: null,
 };
 
-const savedListSlice = createSlice({
-  name: 'savedList',
+const companiesSlice = createSlice({
+  name: 'companies',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getSavedLists.fulfilled, (state, action) => {
-      state.items = action.payload.items;
-      state.meta = action.payload.meta;
+    builder.addCase(getFavouriteCompanies.fulfilled, (state, action) => {
+      const { items, meta } = action.payload;
+      state.favourites.items = items;
+      state.favourites.meta = meta;
       state.loading = false;
     });
     builder.addCase(userActions.logout, (state) => {
-      state.items = [];
-      state.meta = {};
+      state.favourites.items = [];
+      state.favourites.meta = {};
     });
     builder.addMatcher(isPendingAction, (state) => {
       state.loading = true;
@@ -54,6 +59,6 @@ const savedListSlice = createSlice({
   },
 });
 
-export const savedListActions = { ...savedListSlice.actions, getSavedLists };
+export const companiesActions = { ...companiesSlice.actions, getFavouriteCompanies };
 
-export default savedListSlice.reducer;
+export default companiesSlice.reducer;

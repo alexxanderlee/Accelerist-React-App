@@ -31,7 +31,7 @@ export interface IFilters {
   sdgGoals?: string[]
 }
 
-export interface SavedListMeta {
+export interface MetaData {
   totalItems?: number;
   itemCount?: number;
   itemsPerPage?: string;

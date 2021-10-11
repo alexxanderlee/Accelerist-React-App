@@ -22,11 +22,9 @@ const ReportsBlock: React.FC = () => {
 
   if (!team || isLoading) {
     return (
-      <Root>
-        <LoaderWrapper>
-          <Loader />
-        </LoaderWrapper>
-      </Root>
+      <LoaderWrapper>
+        <Loader />
+      </LoaderWrapper>
     );
   }
 
@@ -72,9 +70,11 @@ const Root = styled.div`
 `;
 
 const LoaderWrapper = styled.div`
-  padding: 60px;
+  padding: 70px 0;
+  background-color: #FFFFFF;
+  border-radius: 6px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
 `;
 
