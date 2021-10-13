@@ -13,11 +13,7 @@ const ReportsBlock: React.FC = () => {
   const error = useAppSelector(teamSelectors.getError);
 
   if (error) {
-    return (
-      <Root>
-        <ErrorMessageBox error={error.error} message={error.message} />
-      </Root>
-    );
+    return <ErrorMessageBox error={error.error} message={error.message} />;
   }
 
   if (!team || isLoading) {

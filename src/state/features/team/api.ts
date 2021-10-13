@@ -1,11 +1,18 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({
-  baseURL: 'https://accelerist.herokuapp.com',
-  headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-});
+const baseURL = 'https://accelerist.herokuapp.com';
+const getAccessToken = () => localStorage.getItem('token');
 
 export const teamApi = {
-  getTeam: () => axiosInstance.get('/api/v1/team'),
-  getLastLogins: () => axiosInstance.get('/api/v1/team/last_logins'),
+  getTeam: () => axios({
+    method: 'GET',
+    url: `${baseURL}/api/v1/team`,
+    headers: { 'Authorization': `Bearer ${getAccessToken()}` },
+  }),
+
+  getLastLogins: () => axios({
+    method: 'GET',
+    url: `${baseURL}/api/v1/team/last_logins`,
+    headers: { 'Authorization': `Bearer ${getAccessToken()}` },
+  }),
 };

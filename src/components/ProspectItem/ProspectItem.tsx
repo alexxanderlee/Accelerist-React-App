@@ -98,6 +98,7 @@ const FiltersList = styled.div`
 
 const FilterItem = styled.div`
   margin-right: 8px;
+  margin-bottom: 8px;
   padding: 6px 10px;
   border: 1px solid #CAF0FF;
   border-radius: 6px;
@@ -113,7 +114,7 @@ const FilterItem = styled.div`
 `;
 
 const CounterBlock = styled.div`
-  margin-top: 24px;
+  margin-top: 16px;
   padding: 5px 10px;
   background-color: #F9F9F9;
   border-radius: 4px;
