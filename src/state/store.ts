@@ -10,15 +10,25 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { userReducer } from './features';
+import { userReducer, teamReducer, savedListReducer, companiesReducer } from './features';
 
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['user', 'team', 'savedList', 'companies'],
 };
 
+const userConfig = {
+  key: 'user',
+  storage,
+  blacklist: ['loading', 'error'],
+}
+
 const rootReducer = combineReducers({
-  user: userReducer,
+  user: persistReducer(userConfig, userReducer),
+  team: teamReducer,
+  savedList: savedListReducer,
+  companies: companiesReducer,
 });
 
 const store = configureStore({

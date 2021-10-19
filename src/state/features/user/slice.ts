@@ -1,46 +1,48 @@
 import { createSlice, AsyncThunk, AnyAction } from '@reduxjs/toolkit';
-import { FetchError, UserData } from 'src/interfaces';
+import { FetchError, IUser } from 'src/interfaces';
 import { AuthRequestAttributes, loginUser, sendMail, signupUser, changePassword } from './thunks';
 
 interface UserState {
-  data: UserData | null;
+  user: IUser | null;
+  isAuthenticated: boolean;
   error: FetchError | null;
   loading: boolean;
 }
 
-const initialState: UserState = {
-  data: null,
-  loading: false,
-  error: null,
-};
-
-type AuthAsyncThunk = AsyncThunk<UserData, AuthRequestAttributes, { rejectValue: FetchError }>;
+type AuthAsyncThunk = AsyncThunk<{ user: IUser, token: string }, AuthRequestAttributes, { rejectValue: FetchError }>;
 type PendingAction = ReturnType<AuthAsyncThunk['pending']>;
 type FulfilledAction = ReturnType<AuthAsyncThunk['fulfilled']>;
 type RejectedAction = ReturnType<AuthAsyncThunk['rejected']>;
 
 function isPendingAction(action: AnyAction): action is PendingAction {
-  return action.type.endsWith('/pending');
+  return action.type.startsWith('user/') && action.type.endsWith('/pending');
 }
 
 function isFulfilledAction(action: AnyAction): action is FulfilledAction {
-  return action.type.endsWith('/fulfilled');
+  return action.type.startsWith('user/') && action.type.endsWith('/fulfilled');
 }
 
 function isRejectedAction(action: AnyAction): action is RejectedAction {
-  return action.type.endsWith('/rejected');
+  return action.type.startsWith('user/') && action.type.endsWith('/rejected');
 }
+
+const initialState: UserState = {
+  user: null,
+  isAuthenticated: localStorage.getItem('token') ? true : false,
+  loading: false,
+  error: null,
+};
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     logout: (state) => {
-      state.data = null;
+      state.user = null;
+      state.isAuthenticated = false;
+      localStorage.removeItem('token');
     },
-    clearError: (state) => {
-      state.error = null;
-    },
+    clearError: (state) => { state.error = null },
   },
   extraReducers: (builder) => {
     builder.addMatcher(isPendingAction, (state) => {
@@ -48,12 +50,17 @@ const userSlice = createSlice({
       state.error = null;
     });
     builder.addMatcher(isFulfilledAction, (state, action) => {
-      state.data = action.payload;
+      const { user, token } = action.payload;
+      state.user = user;
+      state.isAuthenticated = true;
       state.loading = false;
+      localStorage.setItem('token', token);
     });
     builder.addMatcher(isRejectedAction, (state, action) => {
-      action.payload && (state.error = action.payload);
+      state.error = action.payload ?? null;
+      state.isAuthenticated = false;
       state.loading = false;
+      localStorage.removeItem('token');
     });
   },
 });
