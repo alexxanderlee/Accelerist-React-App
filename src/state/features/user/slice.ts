@@ -22,6 +22,10 @@ function isFulfilledAction(action: AnyAction): action is FulfilledAction {
   return action.type.startsWith('user/') && action.type.endsWith('/fulfilled');
 }
 
+function isFulfilledAuthAction(action: AnyAction): action is FulfilledAction {
+  return (action.type.startsWith('user/login') || action.type.startsWith('user/signup')) && action.type.endsWith('/fulfilled');
+}
+
 function isRejectedAction(action: AnyAction): action is RejectedAction {
   return action.type.startsWith('user/') && action.type.endsWith('/rejected');
 }
@@ -49,12 +53,14 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = null;
     });
-    builder.addMatcher(isFulfilledAction, (state, action) => {
+    builder.addMatcher(isFulfilledAuthAction, (state, action) => {
       const { user, token } = action.payload;
       state.user = user;
       state.isAuthenticated = true;
-      state.loading = false;
       localStorage.setItem('token', token);
+    });
+    builder.addMatcher(isFulfilledAction, (state) => {
+      state.loading = false;
     });
     builder.addMatcher(isRejectedAction, (state, action) => {
       state.error = action.payload ?? null;

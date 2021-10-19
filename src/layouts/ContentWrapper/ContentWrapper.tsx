@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Header } from 'src/components';
 
 interface ContentWrapperProps {
-  pageTitle?: string
+  pageTitle?: string;
 }
 
 const ContentWrapper: React.FC<ContentWrapperProps> = ({ children, pageTitle }) => {
@@ -36,10 +36,10 @@ const SubheaderWrapper = styled.div`
   margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 `;
 
 const PageTitle = styled.h1`
+  margin-right: 82px;
   font-family: 'Rubik', sans-serif;
   font-weight: 500;
   font-size: 32px;
@@ -49,12 +49,12 @@ const PageTitle = styled.h1`
 
 const Content = styled.div`
   background-color: #F9F9F9;
-  min-height: calc(100% - 176px);
+  min-height: calc(100vh - 176px);
 `;
 
 const Container = styled.div`
   max-width: 1340px;
-  padding: 0 20px 40px 20px;
+  padding: 32px 20px 40px 20px;
   margin: 0 auto;
 `;
 

@@ -6,10 +6,9 @@ import { checkSvg } from 'src/assets/icons';
 interface CheckboxFieldProps extends FieldRenderProps<string> {
   label?: string;
   disabled?: boolean;
-  checked: boolean;
 }
 
-const CheckboxField: React.FC<CheckboxFieldProps> = ({ input, label, disabled, checked }) => {
+const CheckboxField: React.FC<CheckboxFieldProps> = ({ input, label, disabled }) => {
   return (
     <CheckboxLabel>
       {label}

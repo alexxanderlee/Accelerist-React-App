@@ -40,27 +40,22 @@ export const signupUser = createAsyncThunk<
   }
 });
 
-export const sendMail = createAsyncThunk<null, string, { rejectValue: FetchError }>(
+export const sendMail = createAsyncThunk<void, string, { rejectValue: FetchError }>(
   'user/changePassword/sendMail',
   async (email, thunkAPI) => {
     try {
       await userApi.sendMail(email);
-      return null;
     } catch (error) {
       return thunkAPI.rejectWithValue(normalize.error(error as AxiosError));
     }
   }
 );
 
-export const changePassword = createAsyncThunk<
-  null,
-  ChangePasswordAttributes,
-  { rejectValue: FetchError }
->('user/changePassword/sendMail',
+export const changePassword = createAsyncThunk<void, ChangePasswordAttributes, { rejectValue: FetchError }>(
+  'user/changePassword/sendMail',
   async ({ password, resetToken }, thunkAPI) => {
     try {
       await userApi.changePassword(password, resetToken);
-      return null;
     } catch (error) {
       return thunkAPI.rejectWithValue(normalize.error(error as AxiosError));
     }

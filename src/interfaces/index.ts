@@ -32,11 +32,11 @@ export interface IFilters {
 }
 
 export interface MetaData {
-  totalItems?: number;
-  itemCount?: number;
-  itemsPerPage?: string;
-  totalPages?: number;
-  currentPage?: string;
+  totalItems: number;
+  itemCount: number;
+  itemsPerPage: string;
+  totalPages: number;
+  currentPage: string;
 }
 
 export interface IProspect {
@@ -55,6 +55,28 @@ export interface ICompany {
   logo?: string;
   score: number;
   crsFocus: string[];
+  like: boolean;
+  ticker?: string;
+  phone?: string;
+  website?: string;
+  city?: string;
+  street?: string;
+  state?: string;
+  zipCode?: number;
+  country?: string;
+  descriptionList?: string;
+  revenueRange?: string;
+  employeeRange?: number;
+  primaryIndustry?: string[];
+  revenue?: number;
+  employeeCount?: number;
+  annualContributions?: number;
+  cashContributions?: number;
+  inKindContributions?: number;
+  employeeContributions?: number;
+  sdgGoals?: [];
+  charitablePartners?: [];
+  similarCompanies?: string[];
 }
 
 export interface ITeam {
@@ -67,4 +89,9 @@ export interface ILastLogin {
   id: string;
   loggedInAt: string;
   user: IUser;
+}
+
+export interface ISelectorOption {
+  label: string;
+  value: string;
 }

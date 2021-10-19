@@ -7,9 +7,10 @@ import { useAppDispatch, useAppSelector } from 'src/state/hooks';
 import { userActions, userSelectors } from 'src/state/features/user';
 
 interface HeaderProps {
+  searchInputVisible?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = (props) => {
+const Header: React.FC<HeaderProps> = ({ searchInputVisible = true }) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelectors.getUserData);
   const [dropdownHidden, setDropdownHidden] = React.useState<boolean>(true);
@@ -41,20 +42,22 @@ const Header: React.FC<HeaderProps> = (props) => {
               <StyledNavLink to="/dashboard">Dashboard</StyledNavLink>
             </ListItem>
             <ListItem>
-              <StyledNavLink to="!#">Pricing</StyledNavLink>
+              <StyledNavLink to="/search">Search</StyledNavLink>
             </ListItem>
             <ListItem>
-              <StyledNavLink to="!#">Prospecting</StyledNavLink>
+              <StyledNavLink to="/prospects">Prospecting</StyledNavLink>
             </ListItem>
             <ListItem>
-              <StyledNavLink to="!#">Upgrade Membership</StyledNavLink>
+              <StyledNavLink to="/favourites">Favourites</StyledNavLink>
             </ListItem>
           </NavList>
         </Navigation>
-        <SearchWrapper>
-          <SearchInput type="text" placeholder="Search" />
-          <SearchIcon src={searchSvg} />
-        </SearchWrapper>
+        {searchInputVisible && (
+          <SearchWrapper>
+            <SearchInput type="text" placeholder="Search" />
+            <SearchIcon src={searchSvg} />
+          </SearchWrapper>
+        )}
         <User
           onClick={() => setDropdownHidden(false)}
           ref={dropdownRef}
@@ -219,6 +222,7 @@ const Dropdown = styled.div<{ hidden?: boolean }>`
   box-shadow: 0px 2px 20px rgba(40, 31, 61, 0.04);
   border-radius: 6px;
   cursor: default;
+  z-index: 99;
 `;
 
 const DropdownItem = styled.div<{ red?: boolean }>`

@@ -2,15 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Button } from 'src/components/ui';
-import { heartSvg } from 'src/assets/icons';
+import { heartLgSvg } from 'src/assets/icons';
 
 const EmptyFavourites: React.FC = () => {
   return (
     <Root>
-      <Image src={heartSvg} />
+      <Image src={heartLgSvg} />
       <Title>No favorite company</Title>
       <Text>Go to the search page and add to favorites</Text>
-      <BtnWrapper to="!#">
+      <BtnWrapper to="/search">
         <Button text="Search" type="button" variant="OutlinedButton" />
       </BtnWrapper>
     </Root>

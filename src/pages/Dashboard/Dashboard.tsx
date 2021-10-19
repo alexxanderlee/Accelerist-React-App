@@ -59,7 +59,6 @@ const Grid = styled.div`
 `;
 
 const GridTopItem = styled.div`
-  margin-top: 32px;
   grid-column: 1 / 3;
 `;
 

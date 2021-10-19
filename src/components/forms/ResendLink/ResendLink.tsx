@@ -31,6 +31,7 @@ const ResendLink: React.FC = () => {
           disabled={!email}
           onClick={onClick}
           timeout={60000}
+          timeoutOnMount={false}
         />
       </ButtonWrapper>
     </>

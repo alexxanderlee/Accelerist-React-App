@@ -2,7 +2,7 @@ import { css } from 'styled-components';
 
 export const FilledButton = css`
   width: 100%;
-  padding: 12px 68px;
+  padding: 12px 24px;
   background-color: #2BAEE0;
   border-radius: 6px;
   border: none;
@@ -77,5 +77,27 @@ export const TransparentButton = css`
 
   &:hover {
     background-color: rgba(18, 36, 52, 0.25);
+  }
+`;
+
+export const OutlinedGray = css`
+  padding: 12px 46px;
+  border: 1px solid #E8E8E8;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 155%;
+  color: #122434;
+  cursor: pointer;
+  transition: border 0.2s;
+
+  &:hover {
+    border: 1px solid #BFBFBF;
+  }
+
+  &:active {
+    border: 1px solid #2BAEE0;
   }
 `;

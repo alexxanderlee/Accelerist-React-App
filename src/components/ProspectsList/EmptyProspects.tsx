@@ -2,15 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Button } from 'src/components/ui';
-import { folderPlusSvg } from 'src/assets/icons';
+import { folderPlusLgSvg } from 'src/assets/icons';
 
 const EmptyProspects: React.FC = () => {
   return (
     <Root>
-      <Image src={folderPlusSvg} />
+      <Image src={folderPlusLgSvg} />
       <Title>No lists saved</Title>
       <Text>Go to search page and add to saved list</Text>
-      <BtnWrapper to="!#">
+      <BtnWrapper to="/search">
         <Button text="Search" type="button" variant="OutlinedButton" />
       </BtnWrapper>
     </Root>

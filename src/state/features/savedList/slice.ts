@@ -1,11 +1,11 @@
 import { createSlice, AsyncThunk, AnyAction } from '@reduxjs/toolkit';
 import { IProspect, MetaData, FetchError } from 'src/interfaces';
-import { getSavedLists } from './thunks';
+import { getSavedLists, createSavedList } from './thunks';
 import { userActions } from 'src/state/features/user';
 
 interface SavedListState {
   items: IProspect[];
-  meta: MetaData;
+  meta: MetaData | null;
   loading: boolean;
   error: FetchError | null;
 }
@@ -24,7 +24,7 @@ function isRejectedAction(action: AnyAction): action is RejectedAction {
 
 const initialState: SavedListState = {
   items: [],
-  meta: {},
+  meta: null,
   loading: false,
   error: null,
 };
@@ -39,9 +39,13 @@ const savedListSlice = createSlice({
       state.meta = action.payload.meta;
       state.loading = false;
     });
+    builder.addCase(createSavedList.fulfilled, (state, action) => {
+      state.items.push(action.payload);
+      state.loading = false;
+    });
     builder.addCase(userActions.logout, (state) => {
       state.items = [];
-      state.meta = {};
+      state.meta = null;
     });
     builder.addMatcher(isPendingAction, (state) => {
       state.loading = true;
@@ -54,6 +58,6 @@ const savedListSlice = createSlice({
   },
 });
 
-export const savedListActions = { ...savedListSlice.actions, getSavedLists };
+export const savedListActions = { ...savedListSlice.actions, getSavedLists, createSavedList };
 
 export default savedListSlice.reducer;
