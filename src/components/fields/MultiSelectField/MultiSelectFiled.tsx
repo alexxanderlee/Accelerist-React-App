@@ -19,12 +19,12 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   const [selectedOptions, setSelectedOptions] = React.useState<ISelectorOption[]>([]);
   const [optionsVisible, setOptionsVisible] = React.useState<boolean>(false);
 
-  function isSelectedOption(option: ISelectorOption) {
+  function checkIsOptionSelected(option: ISelectorOption) {
     return selectedOptions.some(selectedOption => selectedOption.value === option.value);
   }
 
   function selectOption(option: ISelectorOption) {
-    if (isSelectedOption(option)) {
+    if (checkIsOptionSelected(option)) {
       const options = selectedOptions.filter(selectedOption => selectedOption.value !== option.value);
       setSelectedOptions(options);
     } else {
@@ -74,14 +74,18 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
       </Select>
       {optionsVisible && (
         <OptionsList>
-          {options.map(option => (
-            <OptionItem
-              key={option.value}
-              item={option}
-              isSelectedOption={isSelectedOption}
-              onClick={() => selectOption(option)}
-            />
-          ))}
+          {options.map(option => {
+            const isSelected = checkIsOptionSelected(option);
+            const onClick = () => selectOption(option);
+            return (
+              <OptionItem
+                key={option.value}
+                item={option}
+                isSelected={isSelected}
+                onClick={onClick}
+              />
+            )
+          })}
         </OptionsList>
       )}
     </Wrapper>

@@ -1,8 +1,9 @@
 import { createSlice, AsyncThunk, AnyAction } from '@reduxjs/toolkit';
-import { ICompany, MetaData, FetchError } from 'src/interfaces';
+import { ICompany, MetaData } from 'src/interfaces';
 import { getFavouriteCompanies, getCompanies, likeCompany, dislikeCompany, exportToExcel } from './thunks';
 import { userActions } from 'src/state/features/user';
 import { downloadXlsxFile } from 'src/utils/downloadFile';
+import { toast } from 'react-toastify';
 
 interface CompaniesState {
   companies: {
@@ -14,10 +15,9 @@ interface CompaniesState {
     meta: MetaData | null;
   };
   loading: boolean;
-  error: FetchError | null;
 }
 
-type SavedListAsyncThunk = AsyncThunk<unknown, unknown, { rejectValue: FetchError }>;
+type SavedListAsyncThunk = AsyncThunk<unknown, unknown, { rejectValue: string }>;
 type PendingAction = ReturnType<SavedListAsyncThunk['pending']>;
 type RejectedAction = ReturnType<SavedListAsyncThunk['rejected']>;
 
@@ -39,7 +39,6 @@ const initialState: CompaniesState = {
     meta: null,
   },
   loading: false,
-  error: null,
 };
 
 const companiesSlice = createSlice({
@@ -85,10 +84,9 @@ const companiesSlice = createSlice({
     });
     builder.addMatcher(isPendingAction, (state) => {
       state.loading = true;
-      state.error = null;
     });
     builder.addMatcher(isRejectedAction, (state, action) => {
-      state.error = action.payload ?? null;
+      toast.error(action.payload);
       state.loading = false;
     });
   },

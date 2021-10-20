@@ -4,17 +4,12 @@ import LastLoginItem from './LastLoginItem';
 import { ITeam, ILastLogin } from 'src/interfaces';
 import { useAppSelector } from 'src/state/hooks';
 import { teamSelectors } from 'src/state/features/team';
-import { Loader, ErrorMessageBox } from 'src/components/ui';
+import { Loader } from 'src/components/ui';
 
 const ReportsBlock: React.FC = () => {
   const team: ITeam = useAppSelector(teamSelectors.getTeam);
   const lastLogins: ILastLogin[] = useAppSelector(teamSelectors.getLastLogins);
   const isLoading = useAppSelector(teamSelectors.isLoading);
-  const error = useAppSelector(teamSelectors.getError);
-
-  if (error) {
-    return <ErrorMessageBox error={error.error} message={error.message} />;
-  }
 
   if (!team || isLoading) {
     return (

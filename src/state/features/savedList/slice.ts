@@ -1,16 +1,16 @@
 import { createSlice, AsyncThunk, AnyAction } from '@reduxjs/toolkit';
-import { IProspect, MetaData, FetchError } from 'src/interfaces';
+import { IProspect, MetaData } from 'src/interfaces';
 import { getSavedLists, createSavedList } from './thunks';
 import { userActions } from 'src/state/features/user';
+import { toast } from 'react-toastify';
 
 interface SavedListState {
   items: IProspect[];
   meta: MetaData | null;
   loading: boolean;
-  error: FetchError | null;
 }
 
-type SavedListAsyncThunk = AsyncThunk<unknown, unknown, { rejectValue: FetchError }>;
+type SavedListAsyncThunk = AsyncThunk<unknown, unknown, { rejectValue: string }>;
 type PendingAction = ReturnType<SavedListAsyncThunk['pending']>;
 type RejectedAction = ReturnType<SavedListAsyncThunk['rejected']>;
 
@@ -26,7 +26,6 @@ const initialState: SavedListState = {
   items: [],
   meta: null,
   loading: false,
-  error: null,
 };
 
 const savedListSlice = createSlice({
@@ -49,10 +48,9 @@ const savedListSlice = createSlice({
     });
     builder.addMatcher(isPendingAction, (state) => {
       state.loading = true;
-      state.error = null;
     });
     builder.addMatcher(isRejectedAction, (state, action) => {
-      state.error = action.payload ?? null;
+      toast.error(action.payload);
       state.loading = false;
     });
   },

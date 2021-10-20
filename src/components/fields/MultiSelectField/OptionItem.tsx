@@ -5,15 +5,15 @@ import { ISelectorOption } from 'src/interfaces';
 
 interface OptionItemProps {
   item: ISelectorOption;
-  isSelectedOption: (option: ISelectorOption) => boolean;
+  isSelected: boolean;
   onClick?: () => void;
 }
 
-const OptionItem: React.FC<OptionItemProps> = ({ item, isSelectedOption, onClick }) => {
+const OptionItem: React.FC<OptionItemProps> = ({ item, isSelected, onClick }) => {
   return (
     <Item onClick={onClick}>
       {item.label}
-      <Checkbox checked={isSelectedOption(item)} />
+      <Checkbox checked={isSelected} />
     </Item>
   );
 };

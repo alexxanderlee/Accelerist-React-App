@@ -3,8 +3,12 @@ import { IFilters } from 'src/interfaces';
 const formatFilters = (filters: IFilters) => Object.entries(filters).reduce<string[]>((acc, filter) => {
   const [key, value] = filter;
 
-  if (['q', 'deleteIds', 'scope', 'affinities', 'csrFocusIds'].includes(key)) {
+  if (['deleteIds', 'scope', 'affinities', 'csrFocusIds'].includes(key)) {
     return acc;
+  }
+
+  if (key === 'q' && value) {
+    acc.push(`${value}`);
   }
   
   if (key === 'gender') {

@@ -1,15 +1,15 @@
 import { createSlice, AsyncThunk, AnyAction } from '@reduxjs/toolkit';
-import { FetchError, IUser } from 'src/interfaces';
+import { IUser } from 'src/interfaces';
+import { toast } from 'react-toastify';
 import { AuthRequestAttributes, loginUser, sendMail, signupUser, changePassword } from './thunks';
 
 interface UserState {
   user: IUser | null;
   isAuthenticated: boolean;
-  error: FetchError | null;
   loading: boolean;
 }
 
-type AuthAsyncThunk = AsyncThunk<{ user: IUser, token: string }, AuthRequestAttributes, { rejectValue: FetchError }>;
+type AuthAsyncThunk = AsyncThunk<{ user: IUser, accessToken: string }, AuthRequestAttributes, { rejectValue: string }>;
 type PendingAction = ReturnType<AuthAsyncThunk['pending']>;
 type FulfilledAction = ReturnType<AuthAsyncThunk['fulfilled']>;
 type RejectedAction = ReturnType<AuthAsyncThunk['rejected']>;
@@ -34,7 +34,6 @@ const initialState: UserState = {
   user: null,
   isAuthenticated: localStorage.getItem('token') ? true : false,
   loading: false,
-  error: null,
 };
 
 const userSlice = createSlice({
@@ -46,24 +45,22 @@ const userSlice = createSlice({
       state.isAuthenticated = false;
       localStorage.removeItem('token');
     },
-    clearError: (state) => { state.error = null },
   },
   extraReducers: (builder) => {
     builder.addMatcher(isPendingAction, (state) => {
       state.loading = true;
-      state.error = null;
     });
     builder.addMatcher(isFulfilledAuthAction, (state, action) => {
-      const { user, token } = action.payload;
+      const { user, accessToken } = action.payload;
       state.user = user;
       state.isAuthenticated = true;
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', accessToken);
     });
     builder.addMatcher(isFulfilledAction, (state) => {
       state.loading = false;
     });
     builder.addMatcher(isRejectedAction, (state, action) => {
-      state.error = action.payload ?? null;
+      toast.error(action.payload);
       state.isAuthenticated = false;
       state.loading = false;
       localStorage.removeItem('token');

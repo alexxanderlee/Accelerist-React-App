@@ -5,16 +5,11 @@ import EmptyFavourites from './EmptyFavourites';
 import FavouriteItem from './FavouriteItem';
 import { useAppSelector } from 'src/state/hooks';
 import { companiesSelectors } from 'src/state/features/companies';
-import { Loader, ErrorMessageBox } from 'src/components/ui';
+import { Loader } from 'src/components/ui';
 
 const FavouritesList: React.FC = () => {
   const favourites: ICompany[] = useAppSelector(companiesSelectors.getFavourites);
   const isLoading = useAppSelector(companiesSelectors.isLoading);
-  const error = useAppSelector(companiesSelectors.getError);
-
-  if (error) {
-    return <ErrorMessageBox error={error.error} message={error.message} />
-  }
 
   if (isLoading) {
     return (

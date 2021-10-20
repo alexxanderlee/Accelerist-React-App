@@ -1,29 +1,42 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
-import { AuthPage } from 'src/pages';
-import { Dashboard, SearchPage } from 'src/pages';
-import { useAppSelector } from 'src/state/hooks';
-import { userSelectors } from 'src/state/features/user';
-import { ContentWrapper } from 'src/layouts';
+import RootNavigator from './navigation'
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react'
+import { createGlobalStyle } from 'styled-components';
+import { normalize } from 'styled-normalize';
+import store, { persistor } from 'src/state/store';
+import { Toast } from 'src/components';
 
 const App: React.FC = () => {
-  const isAuthenticated = useAppSelector(userSelectors.isAuthenticated);
-
   return (
-    <>
-      {isAuthenticated ? (
-        <Switch>
-          <Route exact path="/dashboard" component={Dashboard} />
-          <Route path="/search" component={SearchPage} />
-          <Route path="/prospects" render={(props) => <ContentWrapper {...props} pageTitle="Prospecting Sessions" />} />
-          <Route path="/favourites" render={(props) => <ContentWrapper {...props} pageTitle="Favourites" />} />
-          <Redirect to="/dashboard" />
-        </Switch>
-      ) : (
-        <AuthPage />
-      )}
-    </>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <GlobalStyles />
+          <Toast />
+          <RootNavigator />
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
   );
 };
+
+const GlobalStyles = createGlobalStyle`
+  ${normalize}
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Rubik', sans-serif;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  #root {
+    height: 100%;
+  }
+`;
 
 export default App;

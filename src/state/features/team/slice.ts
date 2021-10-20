@@ -1,16 +1,16 @@
 import { createSlice, AsyncThunk, AnyAction } from '@reduxjs/toolkit';
-import { ITeam, ILastLogin, FetchError } from 'src/interfaces';
+import { ITeam, ILastLogin } from 'src/interfaces';
 import { getTeam, getLastLogins } from './thunks';
 import { userActions } from 'src/state/features/user';
+import { toast } from 'react-toastify';
 
 interface TeamData {
   team: ITeam | null;
   lastLogins: ILastLogin[];
   loading: boolean;
-  error: FetchError | null;
 }
 
-type TeamAsyncThunk = AsyncThunk<ITeam | ILastLogin[], void, { rejectValue: FetchError }>;
+type TeamAsyncThunk = AsyncThunk<ITeam | ILastLogin[], void, { rejectValue: string }>;
 type PendingAction = ReturnType<TeamAsyncThunk['pending']>;
 type RejectedAction = ReturnType<TeamAsyncThunk['rejected']>;
 
@@ -26,7 +26,6 @@ const initialState: TeamData = {
   team: null,
   lastLogins: [],
   loading: false,
-  error: null,
 };
 
 const teamSlice = createSlice({
@@ -48,10 +47,9 @@ const teamSlice = createSlice({
     });
     builder.addMatcher(isPendingAction, (state) => {
       state.loading = true;
-      state.error = null;
     });
     builder.addMatcher(isRejectedAction, (state, action) => {
-      state.error = action.payload ?? null;
+      toast.error(action.payload);
       state.loading = false;
     });
   },

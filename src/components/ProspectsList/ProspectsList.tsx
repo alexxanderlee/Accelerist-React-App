@@ -5,16 +5,11 @@ import { ProspectItem } from 'src/components';
 import EmptyProspects from './EmptyProspects';
 import { useAppSelector } from 'src/state/hooks';
 import { savedListSelectors } from 'src/state/features/savedList';
-import { Loader, ErrorMessageBox } from 'src/components/ui';
+import { Loader } from 'src/components/ui';
 
 const ProspectsList: React.FC = () => {
   const prospects: IProspect[] = useAppSelector(savedListSelectors.getSavedLists);
   const isLoading = useAppSelector(savedListSelectors.isLoading);
-  const error = useAppSelector(savedListSelectors.getError);
-
-  if (error) {
-    return <ErrorMessageBox error={error.error} message={error.message} />
-  }
 
   if (isLoading) {
     return (

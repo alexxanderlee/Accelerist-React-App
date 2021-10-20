@@ -1,2 +1,2 @@
-export { default as ContentWrapper } from './ContentWrapper';
-export { default as SearchPageWrapper } from './SearchPageWrapper';
+export { default as AppWrapper } from './AppWrapper';
+export { default as AuthWrapper } from './AuthWrapper';

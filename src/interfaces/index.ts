@@ -1,10 +1,5 @@
 export type SortType = 'alphabet' | 'last-activity' | 'available';
 
-export interface FetchError {
-  error: string;
-  message: string;
-}
-
 export interface IUser {
   id: string;
   email: string;

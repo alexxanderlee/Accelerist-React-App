@@ -1,8 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosResponse, AxiosError } from 'axios';
 import { userApi } from './api';
-import { FetchError, IUser } from 'src/interfaces';
-import normalize from 'src/utils/normalize';
+import { IUser } from 'src/interfaces';
 
 export interface AuthRequestAttributes {
   email: string;
@@ -15,49 +14,57 @@ export interface ChangePasswordAttributes {
 }
 
 export const loginUser = createAsyncThunk<
-  { user: IUser, token: string },
+  { user: IUser, accessToken: string },
   AuthRequestAttributes,
-  { rejectValue: FetchError }
->('user/login', async ({ email, password }, thunkAPI) => {
+  { rejectValue: string }
+>('user/login', async ({ email, password }, { rejectWithValue }) => {
   try {
     const response: AxiosResponse = await userApi.login(email, password);
-    return normalize.authData(response);
+    return response.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(normalize.error(error as AxiosError));
+    const { response, message } = error as AxiosError;
+    const errorMsg = response ? response.data.message : message;
+    return rejectWithValue(errorMsg);
   }
 });
 
 export const signupUser = createAsyncThunk<
-  { user: IUser, token: string },
+  { user: IUser, accessToken: string },
   AuthRequestAttributes,
-  { rejectValue: FetchError }
->('user/signup', async ({ email, password }, thunkAPI) => {
+  { rejectValue: string }
+>('user/signup', async ({ email, password }, { rejectWithValue }) => {
   try {
     const response: AxiosResponse = await userApi.signup(email, password);
-    return normalize.authData(response);
+    return response.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(normalize.error(error as AxiosError));
+    const { response, message } = error as AxiosError;
+    const errorMsg = response ? response.data.message : message;
+    return rejectWithValue(errorMsg);
   }
 });
 
-export const sendMail = createAsyncThunk<void, string, { rejectValue: FetchError }>(
+export const sendMail = createAsyncThunk<void, string, { rejectValue: string }>(
   'user/changePassword/sendMail',
-  async (email, thunkAPI) => {
+  async (email, { rejectWithValue }) => {
     try {
       await userApi.sendMail(email);
     } catch (error) {
-      return thunkAPI.rejectWithValue(normalize.error(error as AxiosError));
+      const { response, message } = error as AxiosError;
+      const errorMsg = response ? response.data.message : message;
+      return rejectWithValue(errorMsg);
     }
   }
 );
 
-export const changePassword = createAsyncThunk<void, ChangePasswordAttributes, { rejectValue: FetchError }>(
+export const changePassword = createAsyncThunk<void, ChangePasswordAttributes, { rejectValue: string }>(
   'user/changePassword/sendMail',
-  async ({ password, resetToken }, thunkAPI) => {
+  async ({ password, resetToken }, { rejectWithValue }) => {
     try {
       await userApi.changePassword(password, resetToken);
     } catch (error) {
-      return thunkAPI.rejectWithValue(normalize.error(error as AxiosError));
+      const { response, message } = error as AxiosError;
+      const errorMsg = response ? response.data.message : message;
+      return rejectWithValue(errorMsg);
     }
   }
 );
