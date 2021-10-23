@@ -1,6 +1,6 @@
 import { css } from 'styled-components';
 
-export const FilledButton = css`
+export const FilledPrimary = css`
   width: 100%;
   padding: 12px 24px;
   background-color: #2BAEE0;
@@ -30,9 +30,8 @@ export const FilledButton = css`
   }
 `;
 
-export const OutlinedButton = css`
-  width: 100%;
-  padding: 9px 100px;
+export const OutlinedPrimary = css`
+  padding: 9px 20px;
   background-color: #FFFFFF;
   border-radius: 6px;
   border: 1px solid #2BAEE0;
@@ -43,25 +42,27 @@ export const OutlinedButton = css`
   line-height: 150%;
   color: #122434;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, color 0.2s;
 
   &:hover {
     background-color: #EBF9FF;
+    color: #2BAEE0;
   }
 
   &:active {
     background-color: #CAF0FF;
+    color: #2BAEE0;
   }
 
   &:disabled {
     background-color: #CEEDF9;
     border: 1px solid rgba(43, 174, 224, 0.3);
     color: rgba(43, 174, 224, 0.3);
-    cursor: default;
+    cursor: not-allowed;
   }
 `;
 
-export const TransparentButton = css`
+export const Transparent = css`
   padding: 9px 24px;
   background-color: rgba(18, 36, 52, 0.15);
   border-radius: 6px;
@@ -80,7 +81,7 @@ export const TransparentButton = css`
   }
 `;
 
-export const OutlinedGray = css`
+export const OutlinedSecondary = css`
   padding: 12px 46px;
   border: 1px solid #E8E8E8;
   border-radius: 6px;
@@ -99,5 +100,34 @@ export const OutlinedGray = css`
 
   &:active {
     border: 1px solid #2BAEE0;
+  }
+`;
+
+export const OutlinedDanger = css`
+  padding: 9px 20px;
+  background-color: #FFFFFF;
+  border: 1px solid #E8E8E8;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 150%;
+  text-align: center;
+  color: #F05658;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: #BFBFBF;
+  }
+
+  &:active {
+    border-color: #F05658;
+  }
+
+  &:disabled {
+    border-color: #EAEAEA;
+    color: #EEBCBD;
+    cursor: not-allowed;
   }
 `;

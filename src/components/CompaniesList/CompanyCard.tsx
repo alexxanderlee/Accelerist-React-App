@@ -64,7 +64,7 @@ const CompanyCard: React.FC<CompanyCardProps> = ({ company, onDislike, onLike })
           <Button
             text="Profile"
             type="button"
-            variant="OutlinedButton"
+            variant="OutlinedPrimary"
             customStyle={'flex: 1'}
             onClick={() => history.push(`/company/${company.id}`)}
           />

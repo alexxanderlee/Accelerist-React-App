@@ -19,7 +19,7 @@ const AuthWrapper: React.FC = ({ children }) => {
           <StyledLink to="/login">
             <Button
               type="button"
-              variant="TransparentButton"
+              variant="Transparent"
               text="Return to Login"
             />
           </StyledLink>

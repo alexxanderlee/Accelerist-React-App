@@ -1,37 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import _ from 'lodash';
 import dayjs from 'dayjs';
+import { Link } from 'react-router-dom';
+import { Filters } from 'src/components';
 import { IProspect } from 'src/interfaces';
-import formatFilters from 'src/utils/filterFormatter';
 
-interface ProspectItemProps {
+interface ProspectCardProps {
   prospect: IProspect;
 }
 
-const ProspectItem: React.FC<ProspectItemProps> = ({
-  prospect: { name, filters, prospectsAvailable, lastAuthor, updatedAt },
+const ProspectCard: React.FC<ProspectCardProps> = ({
+  prospect: { id, name, filters, prospectsAvailable, lastAuthor, updatedAt },
 }) => {
   const lastActivity = dayjs(updatedAt).format('D MMM YYYY');
   const firstChar = lastAuthor.email[0].toUpperCase();
-  const formattedFilters = formatFilters(filters);
 
   return (
     <Wrapper>
       <Header>
-        <StyledLink to="!#">
-          <Title>{name}</Title>
+        <StyledLink to={`/prospects/${id}`}>
+          <Title>{name ? name : 'Unnamed'}</Title>
         </StyledLink>
       </Header>
-      {!_.isEmpty(filters) && (
-        <div>
-          <Text>Filters</Text>
-          <FiltersList>
-            {formattedFilters.map((item, index) => <FilterItem key={index}>{item}</FilterItem>)}
-          </FiltersList>
-        </div>
-      )}
+      <Filters filters={filters} limit={3} />
       <CounterBlock>
         <Text>№ of Prospects Available</Text>
         <CounterValue>{prospectsAvailable}</CounterValue>
@@ -88,29 +79,6 @@ const Text = styled.p`
   font-size: 12px;
   line-height: 150%;
   color: #737373;
-`;
-
-const FiltersList = styled.div`
-  margin-top: 8px;
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const FilterItem = styled.div`
-  margin-right: 8px;
-  margin-bottom: 8px;
-  padding: 6px 10px;
-  border: 1px solid #CAF0FF;
-  border-radius: 6px;
-  font-family: 'Rubik', sans-serif;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 150%;
-  color: #122434;
-
-  &:last-child {
-    margin-right: 0;
-  }
 `;
 
 const CounterBlock = styled.div`
@@ -188,4 +156,4 @@ const Date = styled.p`
   color: #122434
 `;
 
-export default ProspectItem;
+export default ProspectCard;

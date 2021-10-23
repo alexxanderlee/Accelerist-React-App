@@ -8,13 +8,19 @@ import {
   FavouritesList,
   PageBar,
 } from 'src/components';
-import { useAppDispatch } from 'src/state/hooks';
-import { teamActions } from 'src/state/features/team';
-import { savedListActions } from 'src/state/features/savedList';
-import { companiesActions } from 'src/state/features/companies';
+import { useAppDispatch, useAppSelector } from 'src/state/hooks';
+import { teamActions, teamSelectors } from 'src/state/features/team';
+import { savedListActions, savedListSelectors } from 'src/state/features/savedList';
+import { companiesActions, companiesSelectors } from 'src/state/features/companies';
 
 const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
+  
+  const prospects = useAppSelector(savedListSelectors.getSavedLists);
+  const isProspectsLoading = useAppSelector(savedListSelectors.isLoading);
+  const isTeamLoading = useAppSelector(teamSelectors.isLoading);
+  const isFavouritesLoading = useAppSelector(companiesSelectors.isLoading);
+
 
   React.useEffect(() => {
     dispatch(teamActions.getTeam());
@@ -24,14 +30,17 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <AppWrapper pageBar={<PageBar pageTitle="Dashboard" />}>
+    <AppWrapper
+      pageBar={<PageBar pageTitle="Dashboard" />}
+      isLoading={isProspectsLoading || isTeamLoading || isFavouritesLoading}
+    >
       <Grid>
         <GridTopItem>
           <ItemHeader>
             <ItemTitle>Prospecting Sessions</ItemTitle>
             <ItemLink to="/prospects">see more</ItemLink>
           </ItemHeader>
-          <ProspectsList />
+          <ProspectsList prospects={prospects} />
         </GridTopItem>
         <GridItem>
           <ItemHeader>

@@ -1,7 +1,8 @@
 import { createSlice, AsyncThunk, AnyAction } from '@reduxjs/toolkit';
 import { IProspect, MetaData } from 'src/interfaces';
-import { getSavedLists, createSavedList } from './thunks';
+import { getSavedLists, createSavedList, getSavedListById, exportToExcel, deleteSavedList, updateSavedList } from './thunks';
 import { userActions } from 'src/state/features/user';
+import { downloadXlsxFile } from 'src/utils/downloadFile';
 import { toast } from 'react-toastify';
 
 interface SavedListState {
@@ -42,6 +43,30 @@ const savedListSlice = createSlice({
       state.items.push(action.payload);
       state.loading = false;
     });
+    builder.addCase(getSavedListById.fulfilled, (state, action) => {
+      const isExist = state.items.find(savedList => savedList.id === action.payload.id) ? true : false;
+      if (!isExist) {
+        state.items.push(action.payload);
+      }
+      state.loading = false;
+    });
+    builder.addCase(updateSavedList.fulfilled, (state, action) => {
+      state.items = state.items.map(savedList => {
+        if (savedList.id === action.payload.id) {
+          return action.payload;
+        }
+        return savedList;
+      });
+      state.loading = false;
+    });
+    builder.addCase(deleteSavedList.fulfilled, (state, action) => {
+      state.items = state.items.filter(savedList => savedList.id !== action.payload);
+      state.loading = false;
+    });
+    builder.addCase(exportToExcel.fulfilled, (_, action) => {
+      const { file, name } = action.payload;
+      downloadXlsxFile(file, name);
+    });
     builder.addCase(userActions.logout, (state) => {
       state.items = [];
       state.meta = null;
@@ -56,6 +81,14 @@ const savedListSlice = createSlice({
   },
 });
 
-export const savedListActions = { ...savedListSlice.actions, getSavedLists, createSavedList };
+export const savedListActions = {
+  ...savedListSlice.actions,
+  getSavedLists,
+  createSavedList,
+  getSavedListById,
+  exportToExcel,
+  deleteSavedList,
+  updateSavedList,
+};
 
 export default savedListSlice.reducer;

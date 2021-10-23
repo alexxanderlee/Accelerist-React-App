@@ -4,20 +4,10 @@ import LastLoginItem from './LastLoginItem';
 import { ITeam, ILastLogin } from 'src/interfaces';
 import { useAppSelector } from 'src/state/hooks';
 import { teamSelectors } from 'src/state/features/team';
-import { Loader } from 'src/components/ui';
 
 const ReportsBlock: React.FC = () => {
   const team: ITeam = useAppSelector(teamSelectors.getTeam);
   const lastLogins: ILastLogin[] = useAppSelector(teamSelectors.getLastLogins);
-  const isLoading = useAppSelector(teamSelectors.isLoading);
-
-  if (!team || isLoading) {
-    return (
-      <LoaderWrapper>
-        <Loader />
-      </LoaderWrapper>
-    );
-  }
 
   return (
     <Root>
@@ -26,14 +16,14 @@ const ReportsBlock: React.FC = () => {
           <SectionTitle>Search Sessions</SectionTitle>
           <CounterBlock>
             <CounterText>Total</CounterText>
-            <CounterValue>{team.searchCount}</CounterValue>
+            <CounterValue>{team?.searchCount}</CounterValue>
           </CounterBlock>
         </HeaderItem>
         <HeaderItem>
           <SectionTitle>Sent Pitches</SectionTitle>
           <CounterBlock>
             <CounterText>Company</CounterText>
-            <CounterValue>{team.pitchCount}</CounterValue>
+            <CounterValue>{team?.pitchCount}</CounterValue>
           </CounterBlock>
         </HeaderItem>
       </Header>
@@ -58,15 +48,6 @@ const Root = styled.div`
   padding: 24px;
   background-color: #FFFFFF;
   border-radius: 6px;
-`;
-
-const LoaderWrapper = styled.div`
-  padding: 70px 0;
-  background-color: #FFFFFF;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 `;
 
 const SectionTitle = styled.p`
