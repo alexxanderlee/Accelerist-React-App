@@ -32,7 +32,7 @@ const Favourites: React.FC = () => {
       isLoading={isLoading}
     >
       <Root>
-        {meta && (
+        {meta && meta.totalItems > 0 && (
           <TopBar>
             <TotalItems>{meta?.totalItems} companies</TotalItems>
             <Pagination

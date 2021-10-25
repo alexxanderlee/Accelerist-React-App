@@ -1,6 +1,13 @@
 import { createSlice, AsyncThunk, AnyAction } from '@reduxjs/toolkit';
 import { ICompany, MetaData } from 'src/interfaces';
-import { getFavouriteCompanies, getCompanies, likeCompany, dislikeCompany, exportToExcel } from './thunks';
+import {
+  getFavouriteCompanies,
+  getCompanies,
+  likeCompany,
+  dislikeCompany,
+  exportToExcel,
+  getCompanyById,
+} from './thunks';
 import { userActions } from 'src/state/features/user';
 import { downloadXlsxFile } from 'src/utils/downloadFile';
 import { toast } from 'react-toastify';
@@ -58,6 +65,13 @@ const companiesSlice = createSlice({
       state.favourites.meta = meta;
       state.loading = false;
     });
+    builder.addCase(getCompanyById.fulfilled, (state, action) => {
+      const isExist = state.companies.items.find(company => company.id === action.payload.id) ? true : false;
+      if (!isExist) {
+        state.companies.items.push(action.payload);
+      }
+      state.loading = false;
+    });
     builder.addCase(likeCompany.pending, (state, { meta }) => {
       state.companies.items = state.companies.items.map(company => {
         if (company.id === meta.arg) {
@@ -99,6 +113,7 @@ export const companiesActions = {
   likeCompany,
   dislikeCompany,
   exportToExcel,
+  getCompanyById,
 };
 
 export default companiesSlice.reducer;

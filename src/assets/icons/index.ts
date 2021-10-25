@@ -13,3 +13,6 @@ export { default as SearchIcon } from './SearchIcon';
 export { default as XIcon } from './XIcon';
 export { default as ChevronDownSvg } from './ChevronDownSvg';
 export { default as penIconSvg } from './pen-icon.svg';
+export { default as GlobeIcon } from './GlobeIcon';
+export { default as MapPinIcon } from './MapPinIcon';
+export { default as PhoneIcon } from './PhoneIcon';

@@ -18,6 +18,12 @@ export const companiesApi = {
     headers: { 'Authorization': `Bearer ${getAccessToken()}` },
   }),
 
+  getCompanyById: (id: string) => axios({
+    method: 'GET',
+    url: `${baseURL}/api/v1/companies/${id}`,
+    headers: { 'Authorization': `Bearer ${getAccessToken()}` },
+  }),
+
   likeCompany: (id: string) => axios({
     method: 'GET',
     url: `${baseURL}/api/v1/companies/${id}/like`,

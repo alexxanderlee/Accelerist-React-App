@@ -70,8 +70,9 @@ export interface ICompany {
   inKindContributions?: number;
   employeeContributions?: number;
   sdgGoals?: [];
-  charitablePartners?: [];
+  charitablePartners?: string[];
   similarCompanies?: string[];
+  typesOfInvestment?: string[];
 }
 
 export interface ITeam {

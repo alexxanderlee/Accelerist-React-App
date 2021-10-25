@@ -8,13 +8,13 @@ interface FavouriteItemProps {
   company: ICompany
 }
 
-const FavouriteItem: React.FC<FavouriteItemProps> = ({ company: { name, logo, score, crsFocus } }) => {
+const FavouriteItem: React.FC<FavouriteItemProps> = ({ company: { id, name, logo, score, crsFocus } }) => {
   return (
     <Card>
       <Top>
         {logo ? <LogoImg src={logo} /> : <EmptyLogo><SvgImg src={emptyCompanySvg} /></EmptyLogo>}
         <CompanyInfo>
-          <CompanyName to="!#">{name}</CompanyName>
+          <CompanyName to={`/company/${id}`}>{name}</CompanyName>
           <Text>Prioroty Ranking {score}</Text>
         </CompanyInfo>
       </Top>

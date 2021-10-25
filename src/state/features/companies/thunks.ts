@@ -37,6 +37,19 @@ export const getCompanies = createAsyncThunk<
   }
 );
 
+export const getCompanyById = createAsyncThunk<ICompany, string, { rejectValue: string }>(
+  'companies/async/getCompanyById', async (id, { rejectWithValue }) => {
+    try {
+      const response: AxiosResponse = await companiesApi.getCompanyById(id);
+      return response.data;
+    } catch (error) {
+      const { response, message } = error as AxiosError;
+      const errorMsg = response ? response.data.message : message;
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
+
 export const likeCompany = createAsyncThunk<void, string, { rejectValue: string }>(
   'companies/likeCompany', async (companyId, { rejectWithValue }) => {
     try {
