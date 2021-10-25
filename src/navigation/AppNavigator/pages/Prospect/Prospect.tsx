@@ -193,6 +193,7 @@ const TotalItems = styled.p`
 
 const TopBar = styled.div`
   margin-top: 16px;
+  margin-bottom: 24px;
   display: flex;
   justify-content: space-between;
 `;

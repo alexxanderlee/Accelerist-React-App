@@ -6,4 +6,6 @@ export const getCompaniesMeta = (state: RootState) => state.companies.companies.
 
 export const getFavourites = (state: RootState) => state.companies.favourites.items;
 
+export const getFavouritesMeta = (state: RootState) => state.companies.favourites.meta;
+
 export const isLoading = (state: RootState) => state.companies.loading;
