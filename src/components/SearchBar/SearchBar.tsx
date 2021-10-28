@@ -190,7 +190,7 @@ const HeaderWrapper = styled.div`
   display: flex;
   align-items: center;
   
-  @media ${device.mobileM} {
+  @media ${device.mobileL} {
     padding: 0 16px;
     flex-direction: column;
     align-items: unset;
@@ -205,9 +205,20 @@ const PageTitle = styled.h1`
   line-height: 150%;
   color: #122434;
 
+  @media ${device.laptopM} {
+    font-size: 28px;
+    margin-right: 32px;
+  }
+
   @media ${device.tablet} {
     font-size: 28px;
     margin-right: 32px;
+  }
+
+  @media ${device.mobileL} {
+    font-size: 19px;
+    margin: 0;
+    margin-top: 11px;
   }
 
   @media ${device.mobileM} {
@@ -220,12 +231,22 @@ const PageTitle = styled.h1`
 const SearchInputWrapper = styled.form`
   position: relative;
 
+  @media ${device.laptop} {
+    width: 100%;
+    max-width: 715px;
+    margin-right: 18px;
+  }
+
   @media ${device.tablet} {
     width: 100%;
     max-width: 576px;
   }
 
-  @media ${device.mobileM} {
+  @media ${device.mobileL} {
+    margin-top: 4px;
+  }
+
+  @media ${device.mobileL} {
     margin-top: 8px;
   }
 `;
@@ -252,11 +273,11 @@ const SearchInput = styled.input`
     border: 1px solid #737373;
   }
 
-  @media ${device.tablet} {
+  @media ${device.laptop} {
     width: 100%;
   }
 
-  @media ${device.mobileM} {
+  @media ${device.mobileL} {
     padding-left: 16px;
   }
 `;
@@ -293,7 +314,7 @@ const Container = styled.div`
   padding: 32px 20px 0 20px;
   margin: 0 auto;
 
-  @media ${device.mobileM} {
+  @media ${device.mobileL} {
     padding: 12px 16px 0 12px;
   }
 `;
@@ -308,7 +329,7 @@ const FiltersBlock = styled.div`
     padding: 32px 24px;
   }
 
-  @media ${device.mobileM} {
+  @media ${device.tabletXS} {
     padding: 24px 17px;
   }
 `;
@@ -355,13 +376,13 @@ const SectionContent = styled.div`
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-gap: 24px;
 
-  @media ${device.mobileM} {
+  @media ${device.tabletXS} {
     grid-template-columns: 1fr;
   }
 `;
 
 const EmptyField = styled.div`
-  @media ${device.mobileM} {
+  @media ${device.tabletXS} {
     display: none;
   }
 `;

@@ -259,7 +259,7 @@ const SearchWrapper = styled.div`
   margin-right: 40px;
   flex-basis: 365px;
 
-  @media ${device.tablet} {
+  @media ${device.laptopM} {
     display: none;
   }
 `;
@@ -302,6 +302,10 @@ const User = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
+
+  @media ${device.laptop} {
+    min-width: 160px;
+  }
 `;
 
 const Avatar = styled.div`
@@ -351,6 +355,10 @@ const Dropdown = styled.div<{ hidden?: boolean }>`
   border-radius: 6px;
   cursor: default;
   z-index: 100;
+
+  @media ${device.laptop} {
+    min-width: 150px;
+  }
 
   @media ${device.tablet} {
     top: unset;

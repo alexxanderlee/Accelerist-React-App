@@ -12,6 +12,7 @@ interface AppWrapperProps {
   pageTitle?: string;
   subheaderContent?: React.ReactNode;
   enableBackBtn?: boolean;
+  searchInputVisible?: boolean;
 }
 
 const AppWrapper: React.FC<AppWrapperProps> = ({
@@ -20,13 +21,14 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
   subheader,
   pageTitle,
   enableBackBtn,
-  subheaderContent
+  subheaderContent,
+  searchInputVisible = true,
 }) => {
   const history = useHistory();
   
   return (
     <>
-      <Header />
+      <Header searchInputVisible={searchInputVisible} />
       {subheader
         ? subheader
         : <Subheader>
