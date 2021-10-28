@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import queryString from 'query-string';
 import { useHistory } from 'react-router-dom';
-import { AppWrapper } from 'src/layouts';
-import { PageBar, Pagination, CompaniesList } from 'src/components';
+import { MainLayout } from 'src/layouts';
+import { Pagination, CompaniesList } from 'src/components';
 import { useAppDispatch, useAppSelector } from 'src/state/hooks';
 import { companiesActions, companiesSelectors } from 'src/state/features/companies';
 import { ICompany, MetaData } from 'src/interfaces';
@@ -18,17 +18,13 @@ const Favourites: React.FC = () => {
 
   const { page } = queryString.parse(history.location.search);
 
-  function onLikeCallback() {
-    dispatch(companiesActions.getFavouriteCompanies({ page: 1, limit: 12 }));
-  }
-
   React.useEffect(() => {
     dispatch(companiesActions.getFavouriteCompanies({ page: Number(page) || 1, limit: 12 }));
   }, [page]);
 
   return (
-    <AppWrapper
-      pageBar={<PageBar pageTitle="Favourites" />}
+    <MainLayout
+      pageTitle="Favourites"
       isLoading={isLoading}
     >
       <Root>
@@ -43,12 +39,9 @@ const Favourites: React.FC = () => {
             />
           </TopBar>
         )}
-        <CompaniesList
-          companies={companies}
-          onLikeCallback={onLikeCallback}
-        />
+        <CompaniesList companies={companies} />
       </Root>
-    </AppWrapper>
+    </MainLayout>
   );
 };
 

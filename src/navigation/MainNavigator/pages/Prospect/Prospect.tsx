@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import queryString from 'query-string';
 import { RouteComponentProps, useHistory } from 'react-router-dom';
-import { AppWrapper } from 'src/layouts';
-import { PageBar, Pagination, CompaniesList, Filters, ConfirmModalBox } from 'src/components';
+import { MainLayout } from 'src/layouts';
+import { Pagination, CompaniesList, Filters, ConfirmModalBox } from 'src/components';
 import { Loader, Button } from 'src/components/ui';
 import { useAppDispatch, useAppSelector } from 'src/state/hooks';
 import { savedListActions, savedListSelectors } from 'src/state/features/savedList';
@@ -74,10 +74,10 @@ const Prospect: React.FC<RouteComponentProps<MatchParams>> = ({ match }) => {
     }
   }, [prospect, page]);
 
-  const PageBarInner = (
-    <InnerWrapper>
+  const SubheaderContent = (
+    <SubheaderWrapper>
       {isEditable ? (
-        <InnerTitleInput
+        <SubheaderTitleInput
           type="text"
           placeholder="Unnamed"
           value={inputValue}
@@ -85,11 +85,11 @@ const Prospect: React.FC<RouteComponentProps<MatchParams>> = ({ match }) => {
           autoFocus
         />
       ) : (
-        <InnerTitle>{prospect?.name}</InnerTitle>
+        <SubheaderTitle>{prospect?.name}</SubheaderTitle>
       )}
-      <InnerButtons>
+      <SubheaderButtons>
         {isEditable ? (
-          <InnerButtons>
+          <SubheaderButtons>
             <PrimaryBtnWrapper>
               <Button
                 type="button"
@@ -105,9 +105,9 @@ const Prospect: React.FC<RouteComponentProps<MatchParams>> = ({ match }) => {
               onClick={() => setIsEditable(false)}
               disabled={!prospect?.name}
             />
-          </InnerButtons>
+          </SubheaderButtons>
         ) : (
-          <InnerButtons>
+          <SubheaderButtons>
             <PrimaryBtnWrapper>
               <Button
                 type="button"
@@ -126,15 +126,15 @@ const Prospect: React.FC<RouteComponentProps<MatchParams>> = ({ match }) => {
               text="Delete"
               onClick={() => setIsModalVisible(true)}
             />
-          </InnerButtons>
+          </SubheaderButtons>
         )}
-      </InnerButtons>
-    </InnerWrapper>
+      </SubheaderButtons>
+    </SubheaderWrapper>
   );
 
   return (
-    <AppWrapper
-      pageBar={<PageBar inner={PageBarInner} />}
+    <MainLayout
+      subheaderContent={SubheaderContent}
       isLoading={isSavedListLoading || isCompaniesLoading}
     >
       <Root>
@@ -170,7 +170,7 @@ const Prospect: React.FC<RouteComponentProps<MatchParams>> = ({ match }) => {
         )}
         <CompaniesList companies={companies} />
       </Root>
-    </AppWrapper>
+    </MainLayout>
   );
 };
 
@@ -241,14 +241,14 @@ const ExportButton = styled.button`
   }
 `;
 
-const InnerWrapper = styled.div`
+const SubheaderWrapper = styled.div`
   width: 100%;
   max-width: 1096px;
   display: flex;
   justify-content: space-between;
 `;
 
-const InnerTitle = styled.h1`
+const SubheaderTitle = styled.h1`
   font-family: 'Rubik', sans-serif;
   font-weight: 500;
   font-size: 32px;
@@ -256,7 +256,7 @@ const InnerTitle = styled.h1`
   color: #122434;
 `;
 
-const InnerTitleInput = styled.input`
+const SubheaderTitleInput = styled.input`
   padding: 0;
   font-family: 'Rubik', sans-serif;
   font-weight: 500;
@@ -267,7 +267,7 @@ const InnerTitleInput = styled.input`
   border: none;
 `;
 
-const InnerButtons = styled.div`
+const SubheaderButtons = styled.div`
   display: flex;
   align-items: center;
 `;

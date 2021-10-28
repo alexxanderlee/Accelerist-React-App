@@ -4,24 +4,23 @@ import styled from 'styled-components';
 import { ICompany } from 'src/interfaces';
 import { emptyCompanySvg } from 'src/assets/icons';
 import formatMoney from 'src/utils/moneyFormatter';
+import { getFullCompanyAddress } from 'src/utils/getCompanyAddress';
 import { Button, LikeButton } from 'src/components/ui';
+import device from 'src/constants/devices';
 
 interface CompanyCardProps {
   company: ICompany;
-  onDislike: () => void;
-  onLike: () => void;
+  dislikeCompany: () => void;
+  likeCompany: () => void;
 }
 
-const CompanyCard: React.FC<CompanyCardProps> = ({ company, onDislike, onLike }) => {
+const CompanyCard: React.FC<CompanyCardProps> = ({ company, dislikeCompany, likeCompany }) => {
   const history = useHistory();
-
-  const fullAddress = [company.street, company.city, company.state, company.country, company.zipCode]
-    .reduce((acc, value) => value ? `${acc} ${value}` : acc, '');
-
+  const fullAddress = getFullCompanyAddress(company);
   const revenue = company.revenue ? formatMoney(company.revenue) : '-';
 
-  function hanldeLike() {
-    company.like ? onDislike() : onLike();
+  function onClickLike() {
+    company.like ? dislikeCompany() : likeCompany();
   }
 
   return (
@@ -42,7 +41,7 @@ const CompanyCard: React.FC<CompanyCardProps> = ({ company, onDislike, onLike })
           <CompanyAddress>{fullAddress}</CompanyAddress>
           <PhoneNumber>{company.phone}</PhoneNumber>
         </MainInfo>
-        <MiddleBlock>
+        <SecondaryInfo>
           <CSRFocus>
             <Text>CSRFocus</Text>
             {company.crsFocus.length > 0
@@ -54,31 +53,37 @@ const CompanyCard: React.FC<CompanyCardProps> = ({ company, onDislike, onLike })
             <Text>Revenue</Text>
             <BoldText>{revenue}</BoldText>
           </Revenue>
-        </MiddleBlock>
-        <Buttons>
-          <LikeButton
-            liked={company.like}
-            customStyle={'margin-right: 8px'}
-            onClick={hanldeLike}
-          />
-          <Button
-            text="Profile"
-            type="button"
-            variant="OutlinedPrimary"
-            customStyle={'flex: 1'}
-            onClick={() => history.push(`/company/${company.id}`)}
-          />
-        </Buttons>
+        </SecondaryInfo>
       </RightSide>
+      <Buttons>
+        <LikeButton
+          liked={company.like}
+          customStyle={'margin-right: 8px'}
+          onClick={onClickLike}
+        />
+        <Button
+          text="Profile"
+          type="button"
+          variant="OutlinedPrimary"
+          customStyle={'flex: 1'}
+          onClick={() => history.push(`/company/${company.id}`)}
+        />
+      </Buttons>
     </Card>
   );
 };
 
 const Card = styled.div`
+  position: relative;
   padding: 26px;
   background-color: #FFFFFF;
   border-radius: 6px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  @media ${device.tablet} {
+    padding: 24px 16px;
+  }
 `;
 
 const LeftSide = styled.div`
@@ -86,6 +91,12 @@ const LeftSide = styled.div`
   margin-right: 16px;
   border: 1px solid #E8E8E8;
   border-radius: 6px;
+  grid-row: 1/3;
+
+  @media ${device.tablet} {
+    width: 124px;
+    grid-row: 1/2;
+  }
 `;
 
 const CompanyLogo = styled.div`
@@ -98,6 +109,10 @@ const CompanyLogo = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+
+  @media ${device.tablet} {
+    height: 124px;
+  }
 `;
 
 const SvgImg = styled.img`
@@ -131,9 +146,13 @@ const PriorityRankingValue = styled.p`
 `;
 
 const RightSide = styled.div`
-  flex: 1;
+  height: 157px;
   display: flex;
   flex-direction: column;
+
+  @media ${device.tablet} {
+    height: 184px;
+  }
 `;
 
 const MainInfo = styled.div`
@@ -142,7 +161,7 @@ const MainInfo = styled.div`
 
 const CompanyName = styled.p`
   margin: 0;
-  max-width: 290px;
+  width: 290px;
   font-family: 'Rubik', sans-serif;
   font-weight: 500;
   font-size: 16px;
@@ -151,6 +170,10 @@ const CompanyName = styled.p`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+
+  @media ${device.tablet} {
+    max-width: 167px;
+  }
 `;
 
 const CompanyAddress = styled.p`
@@ -173,10 +196,16 @@ const PhoneNumber = styled.p`
   color: #737373;
 `;
 
-const MiddleBlock = styled.div`
+const SecondaryInfo = styled.div`
   margin-top: 16px;
   border-bottom: 1px solid #E8E8E8;
   display: flex;
+
+  @media ${device.tablet} {
+    margin-top: 7px;
+    flex-direction: column;
+    border-bottom: none;
+  }
 `;
 
 const Text = styled.p`
@@ -202,6 +231,11 @@ const CSRFocus = styled.div`
   padding-bottom: 12px;
   padding-right: 18px;
   border-right: 1px solid #E8E8E8;
+
+  @media ${device.tablet} {
+    border-right: none;
+    padding: 0;
+  }
 `;
 
 const CSR = styled.p`
@@ -226,11 +260,33 @@ const Revenue = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+
+  p:last-child {
+    margin-top: 4px;
+  }
+
+  @media ${device.tablet} {
+    padding: 0;
+    margin-top: 14px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: unset;
+
+    p:last-child {
+    margin-top: 0;
+  }
+  }
 `;
 
 const Buttons = styled.div`
   margin-top: 20px;
   display: flex;
+  align-items: flex-end;
+
+  @media ${device.tablet} {
+    margin-top: 16px;
+    grid-column: 1/3;
+  }
 `;
 
 export default CompanyCard;

@@ -1,2 +1,2 @@
-export { default as AppWrapper } from './AppWrapper';
-export { default as AuthWrapper } from './AuthWrapper';
+export { default as MainLayout } from './MainLayout';
+export { default as AuthLayout } from './AuthLayout';

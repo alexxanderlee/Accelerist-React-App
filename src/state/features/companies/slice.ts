@@ -87,6 +87,7 @@ const companiesSlice = createSlice({
         }
         return company;
       });
+      state.favourites.items = state.favourites.items.filter(company => company.id !== meta.arg);
     });
     builder.addCase(exportToExcel.fulfilled, (_, action) => {
       const { file, name } = action.payload;

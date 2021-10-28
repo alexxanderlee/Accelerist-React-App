@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { RouteComponentProps } from 'react-router-dom';
-import { AppWrapper } from 'src/layouts';
-import { PageBar } from 'src/components';
+import { MainLayout } from 'src/layouts';
 import { LikeButton } from 'src/components/ui';
 import { useAppDispatch, useAppSelector } from 'src/state/hooks';
 import { companiesActions, companiesSelectors } from 'src/state/features/companies';
 import { ICompany } from 'src/interfaces';
 import { emptyCompanySvg, MapPinIcon, GlobeIcon, PhoneIcon } from 'src/assets/icons';
 import formatMoney from 'src/utils/moneyFormatter';
+import { getFullCompanyAddress } from 'src/utils/getCompanyAddress';
 import Description from './Description';
 
 interface MatchParams {
@@ -21,20 +21,10 @@ const CompanyProfile: React.FC<RouteComponentProps<MatchParams>> = ({ match }) =
   const company: ICompany = useAppSelector(state => companiesSelectors.getCompanyById(state, companyId));
   const isLoading: boolean = useAppSelector(companiesSelectors.isLoading);
 
-  function hanldeLike() {
+  function onClickLike() {
     company.like
       ? dispatch(companiesActions.dislikeCompany(companyId))
       : dispatch(companiesActions.likeCompany(companyId));
-  }
-
-  function getFullAddress() {
-    return [
-      company.street,
-      company.city,
-      company.state,
-      company.country,
-      company.zipCode
-    ].reduce((acc, value) => value ? `${acc} ${value}` : acc, '');
   }
 
   React.useEffect(() => {
@@ -44,8 +34,9 @@ const CompanyProfile: React.FC<RouteComponentProps<MatchParams>> = ({ match }) =
   }, []);
 
   return (
-    <AppWrapper
-      pageBar={<PageBar pageTitle="Corporate Profile" enableBackBtn={true} />}
+    <MainLayout
+      pageTitle="Corporate Profile"
+      enableBackBtn={true}
       isLoading={isLoading}
     >
       {company && (
@@ -61,7 +52,7 @@ const CompanyProfile: React.FC<RouteComponentProps<MatchParams>> = ({ match }) =
                 <LikeButton
                   iconOnly={true}
                   liked={company.like}
-                  onClick={hanldeLike}
+                  onClick={onClickLike}
                 />
               </HeaderRow>
               <HeaderCSRFocus>
@@ -107,7 +98,7 @@ const CompanyProfile: React.FC<RouteComponentProps<MatchParams>> = ({ match }) =
                 </ContactsRow>
                 <ContactsItem>
                   <MapPinIcon />
-                  <p>{getFullAddress()}</p>
+                  <p>{getFullCompanyAddress(company)}</p>
                 </ContactsItem>
               </Contacts>
               <Title>Social Impact</Title>
@@ -170,7 +161,7 @@ const CompanyProfile: React.FC<RouteComponentProps<MatchParams>> = ({ match }) =
           </ProfileBody>
         </Root>
       )}
-    </AppWrapper>
+    </MainLayout>
   );
 };
 

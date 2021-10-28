@@ -1,6 +1,6 @@
 import { createSlice, AsyncThunk, AnyAction } from '@reduxjs/toolkit';
 import { ITeam, ILastLogin } from 'src/interfaces';
-import { getTeam, getLastLogins } from './thunks';
+import { getTeam, getLastLogins, getReports } from './thunks';
 import { userActions } from 'src/state/features/user';
 import { toast } from 'react-toastify';
 
@@ -41,6 +41,11 @@ const teamSlice = createSlice({
       state.lastLogins = action.payload;
       state.loading = false;
     });
+    builder.addCase(getReports.fulfilled, (state, action) => {
+      state.team = action.payload.team;
+      state.lastLogins = action.payload.lastLogins;
+      state.loading = false;
+    });
     builder.addCase(userActions.logout, (state) => {
       state.team = null;
       state.lastLogins = [];
@@ -55,6 +60,6 @@ const teamSlice = createSlice({
   },
 });
 
-export const teamActions = { ...teamSlice.actions, getTeam, getLastLogins };
+export const teamActions = { ...teamSlice.actions, getTeam, getLastLogins, getReports };
 
 export default teamSlice.reducer;
