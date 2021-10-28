@@ -48,8 +48,11 @@ const Grid = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-gap: 24px;
 
-  @media ${device.mobileM} {
+  @media ${device.tabletXS} {
     grid-template-columns: 1fr;
+  }
+
+  @media ${device.mobileL} {
     grid-gap: 17px;
   }
 `;

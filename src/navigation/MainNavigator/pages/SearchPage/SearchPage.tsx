@@ -106,10 +106,13 @@ const TotalItems = styled.p`
   line-height: 145%;
   color: #122434;
 
-  @media ${device.mobileM} {
+  @media ${device.mobileL} {
     margin-bottom: 16px;
-    font-weight: 400;
     font-size: 12px;
+  }
+
+  @media ${device.mobileM} {
+    font-weight: 400;
   }
 `;
 
@@ -118,7 +121,7 @@ const TopBar = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media ${device.mobileM} {
+  @media ${device.mobileL} {
     margin-bottom: 16px;
   }
 `;
@@ -171,7 +174,7 @@ const ActionButton = styled.button<{ saveList?: boolean, upload?: boolean }>`
     display: flex;
   }
 
-  @media ${device.mobileM} {
+  @media ${device.mobileL} {
     &:not(:last-child) {
       margin-right: 20px;
     }
@@ -179,7 +182,7 @@ const ActionButton = styled.button<{ saveList?: boolean, upload?: boolean }>`
 `;
 
 const TopPagination = styled.div`
-  @media ${device.mobileM} {
+  @media ${device.mobileL} {
     display: none;
   }
 `;
@@ -189,7 +192,7 @@ const BottomPagination = styled.div`
   margin-top: 16px;
   justify-content: center;
 
-  @media ${device.mobileM} {
+  @media ${device.mobileL} {
     display: flex;
   }
 `;
