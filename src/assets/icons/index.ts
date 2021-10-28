@@ -12,3 +12,4 @@ export { default as SettingsIcon } from './SettingsIcon';
 export { default as SearchIcon } from './SearchIcon';
 export { default as XIcon } from './XIcon';
 export { default as ChevronDownSvg } from './ChevronDownSvg';
+export { default as penIconSvg } from './pen-icon.svg';

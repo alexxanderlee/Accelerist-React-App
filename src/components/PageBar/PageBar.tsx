@@ -3,13 +3,14 @@ import styled from 'styled-components';
 
 interface PageBarProps {
   pageTitle?: string;
+  inner?: React.ReactNode;
 }
 
-const PageBar: React.FC<PageBarProps> = ({ pageTitle }) => {
+const PageBar: React.FC<PageBarProps> = ({ pageTitle, inner }) => {
   return (
     <Bar>
       <Wrapper>
-        <PageTitle>{pageTitle}</PageTitle>
+        {inner ? inner : <PageTitle>{pageTitle}</PageTitle>}
       </Wrapper>
     </Bar>
   );

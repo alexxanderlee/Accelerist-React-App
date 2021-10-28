@@ -11,7 +11,12 @@ const EmptyFavourites: React.FC = () => {
       <Title>No favorite company</Title>
       <Text>Go to the search page and add to favorites</Text>
       <BtnWrapper to="/search">
-        <Button text="Search" type="button" variant="OutlinedButton" />
+        <Button
+          text="Search"
+          type="button"
+          variant="OutlinedPrimary"
+          customStyle={'width: 244px'}
+        />
       </BtnWrapper>
     </Root>
   );

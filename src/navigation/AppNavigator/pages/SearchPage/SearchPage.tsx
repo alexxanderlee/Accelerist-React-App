@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import queryString from 'query-string';
 import { AnyAction } from '@reduxjs/toolkit';
 import { AppWrapper } from 'src/layouts';
-import { Loader } from 'src/components/ui';
 import { ICompany, MetaData } from 'src/interfaces';
-import { CompanyCard, Pagination, SearchBar } from 'src/components';
-import { folderPlusSvg, uploadSvg, emptyCompanySvg } from 'src/assets/icons';
+import { Loader } from 'src/components/ui';
+import { Pagination, SearchBar, CompaniesList } from 'src/components';
+import { folderPlusSvg, uploadSvg } from 'src/assets/icons';
 import { useAppSelector, useAppDispatch } from 'src/state/hooks';
 import { companiesSelectors, companiesActions } from 'src/state/features/companies';
 import { savedListActions } from 'src/state/features/savedList';
@@ -19,17 +19,8 @@ const SearchPage: React.FC = () => {
   const meta: MetaData = useAppSelector(companiesSelectors.getCompaniesMeta);
   const isLoading: boolean = useAppSelector(companiesSelectors.isLoading);
 
-  const [isDownloading, setIsDownloading] = React.useState<boolean>(false);
+  const [isExporting, setIsExporting] = React.useState<boolean>(false);
   const { page, ...filters } = queryString.parse(history.location.search);
-  const pageNumber = Number(page);
-
-  function onDislike(id: string) {
-    dispatch(companiesActions.dislikeCompany(id));
-  }
-
-  function onLike(id: string) {
-    dispatch(companiesActions.likeCompany(id));
-  }
 
   function handleSaveList() {
     dispatch(savedListActions.createSavedList({ filters, prospectsAvailable: meta.totalItems }))
@@ -41,31 +32,24 @@ const SearchPage: React.FC = () => {
   }
 
   function handleExportList() {
-    setIsDownloading(true);
-    dispatch(companiesActions.exportToExcel({ page: pageNumber || 1, limit: 12, filters }))
-      .then(() => setIsDownloading(false));
+    setIsExporting(true);
+    dispatch(companiesActions.exportToExcel({ page: Number(page) || 1, limit: 12, filters }))
+      .then(() => setIsExporting(false));
   }
 
   React.useEffect(() => {
-    dispatch(companiesActions.getCompanies({ page: pageNumber || 1, limit: 12, filters }));
-  }, [pageNumber]);
-
-  if (isLoading || !meta) {
-    return (
-      <AppWrapper pageBar={<SearchBar />}>
-        <LoaderWrapper>
-          <Loader />
-        </LoaderWrapper>
-      </AppWrapper>
-    );
-  }
+    dispatch(companiesActions.getCompanies({ page: Number(page) || 1, limit: 12, filters }));
+  }, [page]);
 
   return (
-    <AppWrapper pageBar={<SearchBar />}>
-      {companies.length > 0 ? (
-        <Root>
-          <TotalItems>Found {meta.totalItems} companies</TotalItems>
-          <Actions>
+    <AppWrapper
+      pageBar={<SearchBar />}
+      isLoading={isLoading}
+    >
+      <Root>
+        <TotalItems>Found {meta?.totalItems} companies</TotalItems>
+        {meta && meta.totalItems > 0 && (
+          <TopBar>
             <Buttons>
               <ActionButton
                 saveList
@@ -74,9 +58,9 @@ const SearchPage: React.FC = () => {
               <ActionButton
                 upload
                 onClick={handleExportList}
-                disabled={isDownloading}
+                disabled={isExporting}
               >
-                {isDownloading ? <Loader width={18} height={18} /> : 'Export to Excel'}
+                {isExporting ? <Loader width={18} height={18} /> : 'Export to Excel'}
               </ActionButton>
             </Buttons>
             <Pagination
@@ -85,67 +69,24 @@ const SearchPage: React.FC = () => {
               itemsPerPage={Number(meta.itemsPerPage)}
               currentPage={Number(meta.currentPage)}
             />
-          </Actions>
-          <Grid>
-            {companies.map(company => (
-              <CompanyCard
-                key={company.id}
-                company={company}
-                onDislike={() => onDislike(company.id)}
-                onLike={() => onLike(company.id)}
-              />
-            ))}
-          </Grid>
-        </Root>
-      ) : (
-        <EmptyListWrapper>
-          <EmptyListImg src={emptyCompanySvg} />
-          <EmptyListText>No companies</EmptyListText>
-        </EmptyListWrapper>
-      )}
+          </TopBar>
+        )}
+        <CompaniesList companies={companies} />
+      </Root>
     </AppWrapper>
   );
 };
 
 const Root = styled.div`
   max-width: 1096px;
-`;
-
-const LoaderWrapper = styled.div`
-  max-width: 1096px;
-  height: calc(100vh - 248px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const EmptyListWrapper = styled.div`
-  max-width: 1096px;
-  height: calc(100vh - 248px);
-  background-color: #FFFFFF;
-  border-radius: 6px;
+  min-height: calc(100vh - 248px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const EmptyListImg = styled.img`
-  height: 48px;
-  margin-bottom: 30px;
-`;
-
-const EmptyListText = styled.p`
-  margin: 0;
-  font-family: 'Rubik', sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 145%;
-  color: #122434;
 `;
 
 const TotalItems = styled.p`
   margin-top: 0;
+  margin-bottom: 24px;
   font-family: 'Rubik', sans-serif;
   font-weight: 500;
   font-size: 16px;
@@ -153,8 +94,7 @@ const TotalItems = styled.p`
   color: #122434;
 `;
 
-const Actions = styled.div`
-  margin-top: 24px;
+const TopBar = styled.div`
   display: flex;
   justify-content: space-between;
 `;
@@ -206,13 +146,6 @@ const ActionButton = styled.button<{ saveList?: boolean, upload?: boolean }>`
     margin: 0 20px;
     display: flex;
   }
-`;
-
-const Grid = styled.div`
-  margin-top: 24px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 24px;
 `;
 
 export default SearchPage;

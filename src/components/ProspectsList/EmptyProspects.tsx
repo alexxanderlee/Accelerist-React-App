@@ -11,19 +11,26 @@ const EmptyProspects: React.FC = () => {
       <Title>No lists saved</Title>
       <Text>Go to search page and add to saved list</Text>
       <BtnWrapper to="/search">
-        <Button text="Search" type="button" variant="OutlinedButton" />
+        <Button
+          text="Search"
+          type="button"
+          variant="OutlinedPrimary"
+          customStyle={'width: 244px'}
+        />
       </BtnWrapper>
     </Root>
   );
 };
 
 const Root = styled.div`
+  flex: 1;
   padding: 40px 0;
   background-color: #FFFFFF;
   border-radius: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 `;
 
 const Image = styled.img``;

@@ -146,7 +146,7 @@ const SearchBar: React.FC = () => {
                   <Buttons>
                     <Button
                       text="Cancel"
-                      variant="OutlinedGray"
+                      variant="OutlinedSecondary"
                       customStyle={'margin-right: 8px;'}
                       onClick={() => {
                         setFiltersVisible(false);

@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 interface ButtonWithTimeoutProps {
   text?: string;
   type?: 'button' | 'reset' | 'submit';
-  variant?: 'FilledButton' | 'OutlinedButton' | 'TransparentButton';
+  variant?: 'FilledPrimary' | 'OutlinedPrimary' | 'Transparent' | 'OutlinedSecondary';
   disabled?: boolean;
   onClick?: () => void;
   timeout: number;
