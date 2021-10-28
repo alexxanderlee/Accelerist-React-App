@@ -1,15 +1,17 @@
 import React from 'react';
-import styled, { CSSProp } from 'styled-components';
+import styled, { CSSProp, css } from 'styled-components';
 
 interface LikeButtonProps {
   liked: boolean;
   customStyle?: CSSProp;
+  iconOnly?: boolean;
   onClick?: () => void;
 }
 
-const LikeButton: React.FC<LikeButtonProps> = ({ liked, customStyle, onClick }) => {
+const LikeButton: React.FC<LikeButtonProps> = ({ liked, iconOnly = false, customStyle, onClick }) => {
   return (
     <Button
+      iconOnly={iconOnly}
       customStyle={customStyle}
       onClick={onClick}
     >
@@ -26,7 +28,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ liked, customStyle, onClick }) 
   );
 };
 
-const Button = styled.button<{ customStyle?: CSSProp }>`
+const Button = styled.button<{ customStyle?: CSSProp, iconOnly?: boolean }>`
   width: 40px;
   height: 40px;
   background-color: #FFFFFF;
@@ -41,6 +43,18 @@ const Button = styled.button<{ customStyle?: CSSProp }>`
   &:hover {
     border: 1px solid #F05658;
   }
+
+  ${props => props.iconOnly && css`
+    width: 18px;
+    height: 16px;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+
+    &:hover {
+      border: none;
+    }
+  `}
 
   ${props => props.customStyle}
 `;

@@ -148,9 +148,9 @@ const Prospect: React.FC<RouteComponentProps<MatchParams>> = ({ match }) => {
             onConfirm={deleteProspect}
           />
         )}
-        <TotalItems>{compnaiesMeta?.totalItems} companies</TotalItems>
         {prospect && compnaiesMeta && compnaiesMeta.totalItems > 0 && (
           <>
+            <TotalItems>{compnaiesMeta?.totalItems} companies</TotalItems>
             <Filters filters={prospect.filters} />
             <TopBar>
               <ExportButton
@@ -193,6 +193,7 @@ const TotalItems = styled.p`
 
 const TopBar = styled.div`
   margin-top: 16px;
+  margin-bottom: 24px;
   display: flex;
   justify-content: space-between;
 `;

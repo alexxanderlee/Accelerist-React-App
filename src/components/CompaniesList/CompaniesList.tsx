@@ -8,17 +8,20 @@ import { ICompany } from 'src/interfaces';
 
 interface CompaniesListProps {
   companies: ICompany[];
+  onLikeCallback?: () => void;
 }
 
-const CompaniesList: React.FC<CompaniesListProps> = ({ companies }) => {
+const CompaniesList: React.FC<CompaniesListProps> = ({ companies, onLikeCallback }) => {
   const dispatch = useAppDispatch();
 
   function onDislike(id: string) {
-    dispatch(companiesActions.dislikeCompany(id));
+    dispatch(companiesActions.dislikeCompany(id))
+      .then(onLikeCallback);
   }
 
   function onLike(id: string) {
-    dispatch(companiesActions.likeCompany(id));
+    dispatch(companiesActions.likeCompany(id))
+      .then(onLikeCallback);
   }
 
   return (
@@ -43,7 +46,6 @@ const CompaniesList: React.FC<CompaniesListProps> = ({ companies }) => {
 };
 
 const Grid = styled.div`
-  margin-top: 24px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 24px;
