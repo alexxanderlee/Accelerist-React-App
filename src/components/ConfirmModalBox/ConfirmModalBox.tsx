@@ -6,7 +6,7 @@ interface ConfirmModalBoxProps {
   title: string;
   descr: string;
   confirmButtonText?: string;
-  onConfirm?: () => void;
+  onConfirm: () => void;
   onCancel?: () => void;
   onClose: () => void;
 }
@@ -48,7 +48,10 @@ const ConfirmModalBox: React.FC<ConfirmModalBoxProps> = ({
             variant="OutlinedDanger"
             text={confirmButtonText}
             customStyle={{ flex: 1 }}
-            onClick={onConfirm}
+            onClick={() => {
+              onConfirm();
+              onClose();
+            }}
           />
           <CancelButton onClick={onCancel}>Cancel</CancelButton>
         </Buttons>

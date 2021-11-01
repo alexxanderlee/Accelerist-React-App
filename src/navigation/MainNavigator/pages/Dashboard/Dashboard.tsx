@@ -1,17 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { AppWrapper } from 'src/layouts';
+import { MainLayout } from 'src/layouts';
 import {
   ReportsBlock,
   ProspectsList,
   FavouritesList,
-  PageBar,
 } from 'src/components';
 import { useAppDispatch, useAppSelector } from 'src/state/hooks';
 import { teamActions, teamSelectors } from 'src/state/features/team';
 import { savedListActions, savedListSelectors } from 'src/state/features/savedList';
 import { companiesActions, companiesSelectors } from 'src/state/features/companies';
+import { SortTypes } from 'src/constants';
 
 const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,15 +23,14 @@ const Dashboard: React.FC = () => {
 
 
   React.useEffect(() => {
-    dispatch(teamActions.getTeam());
-    dispatch(teamActions.getLastLogins());
-    dispatch(savedListActions.getSavedLists({ page: 1, limit: 2, sort: 'alphabet' }));
+    dispatch(teamActions.getReports());
+    dispatch(savedListActions.getSavedLists({ page: 1, limit: 2, sort: SortTypes.Alphabet }));
     dispatch(companiesActions.getFavouriteCompanies({ page: 1, limit: 6 }));
   }, []);
 
   return (
-    <AppWrapper
-      pageBar={<PageBar pageTitle="Dashboard" />}
+    <MainLayout
+      pageTitle="Dashboard"
       isLoading={isProspectsLoading || isTeamLoading || isFavouritesLoading}
     >
       <Grid>
@@ -56,7 +55,7 @@ const Dashboard: React.FC = () => {
           <ReportsBlock/>
         </GridItem>
       </Grid>
-    </AppWrapper>
+    </MainLayout>
   );
 };
 

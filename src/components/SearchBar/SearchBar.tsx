@@ -9,7 +9,8 @@ import { useAppDispatch } from 'src/state/hooks';
 import { companiesActions } from 'src/state/features/companies';
 import { InputField, MultiSelectField, TabSelectorField } from 'src/components/fields';
 import { Button } from 'src/components/ui';
-import { ageRanges, income, ethnicities, genders } from './constants';
+import { ageRanges, income, ethnicities, genders } from 'src/constants/searchFilters';
+import device from 'src/constants/devices';
 
 const SearchBar: React.FC = () => {
   const history = useHistory();
@@ -38,7 +39,7 @@ const SearchBar: React.FC = () => {
                 <SearchButtons>
                   <SearchBtn type="button" onClick={() => {
                     form.reset();
-                    onSubmit({});
+                    !pristine && onSubmit({});
                   }}>
                     <XIcon />
                   </SearchBtn>
@@ -119,7 +120,7 @@ const SearchBar: React.FC = () => {
                         defaultOptionIndex={2}
                         component={TabSelectorField}
                       />
-                      <div />
+                      <EmptyField />
                       <Field
                         name="income"
                         label="Household income"
@@ -174,6 +175,11 @@ const SearchBar: React.FC = () => {
 const Header = styled.div`
   background-color: #FFFFFF;
   height: 96px;
+
+  @media ${device.mobileM} {
+    background-color: #F9F9F9;
+    height: unset;
+  }
 `;
 
 const HeaderWrapper = styled.div`
@@ -183,6 +189,12 @@ const HeaderWrapper = styled.div`
   margin: 0 auto;
   display: flex;
   align-items: center;
+  
+  @media ${device.mobileL} {
+    padding: 0 16px;
+    flex-direction: column;
+    align-items: unset;
+  }
 `;
 
 const PageTitle = styled.h1`
@@ -192,10 +204,51 @@ const PageTitle = styled.h1`
   font-size: 32px;
   line-height: 150%;
   color: #122434;
+
+  @media ${device.laptopM} {
+    font-size: 28px;
+    margin-right: 32px;
+  }
+
+  @media ${device.tablet} {
+    font-size: 28px;
+    margin-right: 32px;
+  }
+
+  @media ${device.mobileL} {
+    font-size: 19px;
+    margin: 0;
+    margin-top: 11px;
+  }
+
+  @media ${device.mobileM} {
+    font-size: 16px;
+    margin: 0;
+    margin-top: 16px;
+  }
 `;
 
 const SearchInputWrapper = styled.form`
   position: relative;
+
+  @media ${device.laptop} {
+    width: 100%;
+    max-width: 715px;
+    margin-right: 18px;
+  }
+
+  @media ${device.tablet} {
+    width: 100%;
+    max-width: 576px;
+  }
+
+  @media ${device.mobileL} {
+    margin-top: 4px;
+  }
+
+  @media ${device.mobileL} {
+    margin-top: 8px;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -218,6 +271,14 @@ const SearchInput = styled.input`
 
   &:focus {
     border: 1px solid #737373;
+  }
+
+  @media ${device.laptop} {
+    width: 100%;
+  }
+
+  @media ${device.mobileL} {
+    padding-left: 16px;
   }
 `;
 
@@ -252,6 +313,10 @@ const Container = styled.div`
   max-width: 1340px;
   padding: 32px 20px 0 20px;
   margin: 0 auto;
+
+  @media ${device.mobileL} {
+    padding: 12px 16px 0 12px;
+  }
 `;
 
 const FiltersBlock = styled.div`
@@ -259,6 +324,14 @@ const FiltersBlock = styled.div`
   padding: 40px;
   background-color: #FFFFFF;
   border-radius: 6px;
+
+  @media ${device.tablet} {
+    padding: 32px 24px;
+  }
+
+  @media ${device.tabletXS} {
+    padding: 24px 17px;
+  }
 `;
 
 const FiltersTitle = styled.p`
@@ -268,11 +341,20 @@ const FiltersTitle = styled.p`
   font-size: 24px;
   line-height: 148%;
   color: #122434;
+
+  @media ${device.mobileM} {
+    font-size: 16px;
+  }
 `;
 
 const FiltersSection = styled.section`
   margin-top: 16px;
   margin-bottom: 40px;
+
+  @media ${device.mobileM} {
+    margin-top: 12px;
+    margin-bottom: 28px;
+  }
 `;
 
 const SectionTitle = styled.p`
@@ -282,6 +364,10 @@ const SectionTitle = styled.p`
   font-size: 16px;
   line-height: 145%;
   color: #122434;
+
+  @media ${device.mobileM} {
+    font-size: 12px;
+  }
 `;
 
 const SectionContent = styled.div`
@@ -289,6 +375,16 @@ const SectionContent = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-gap: 24px;
+
+  @media ${device.tabletXS} {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const EmptyField = styled.div`
+  @media ${device.tabletXS} {
+    display: none;
+  }
 `;
 
 const Buttons = styled.div`

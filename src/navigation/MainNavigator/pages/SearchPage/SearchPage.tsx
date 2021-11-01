@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import queryString from 'query-string';
 import { AnyAction } from '@reduxjs/toolkit';
-import { AppWrapper } from 'src/layouts';
+import { MainLayout } from 'src/layouts';
 import { ICompany, MetaData } from 'src/interfaces';
 import { Loader } from 'src/components/ui';
 import { Pagination, SearchBar, CompaniesList } from 'src/components';
@@ -11,6 +11,7 @@ import { folderPlusSvg, uploadSvg } from 'src/assets/icons';
 import { useAppSelector, useAppDispatch } from 'src/state/hooks';
 import { companiesSelectors, companiesActions } from 'src/state/features/companies';
 import { savedListActions } from 'src/state/features/savedList';
+import device from 'src/constants/devices';
 
 const SearchPage: React.FC = () => {
   const history = useHistory();
@@ -42,9 +43,10 @@ const SearchPage: React.FC = () => {
   }, [page]);
 
   return (
-    <AppWrapper
-      pageBar={<SearchBar />}
+    <MainLayout
+      subheader={<SearchBar />}
       isLoading={isLoading}
+      searchInputVisible={false}
     >
       <Root>
         <TotalItems>Found {meta?.totalItems} companies</TotalItems>
@@ -63,17 +65,29 @@ const SearchPage: React.FC = () => {
                 {isExporting ? <Loader width={18} height={18} /> : 'Export to Excel'}
               </ActionButton>
             </Buttons>
+            <TopPagination>
+              <Pagination
+                totalItems={meta.totalItems}
+                itemCount={meta.itemCount}
+                itemsPerPage={Number(meta.itemsPerPage)}
+                currentPage={Number(meta.currentPage)}
+              />
+            </TopPagination>
+          </TopBar>
+        )}
+        <CompaniesList companies={companies} />
+        {!!meta?.totalItems && (
+          <BottomPagination>
             <Pagination
               totalItems={meta.totalItems}
               itemCount={meta.itemCount}
               itemsPerPage={Number(meta.itemsPerPage)}
               currentPage={Number(meta.currentPage)}
             />
-          </TopBar>
+          </BottomPagination>
         )}
-        <CompaniesList companies={companies} />
       </Root>
-    </AppWrapper>
+    </MainLayout>
   );
 };
 
@@ -92,12 +106,25 @@ const TotalItems = styled.p`
   font-size: 16px;
   line-height: 145%;
   color: #122434;
+
+  @media ${device.mobileL} {
+    margin-bottom: 16px;
+    font-size: 12px;
+  }
+
+  @media ${device.mobileM} {
+    font-weight: 400;
+  }
 `;
 
 const TopBar = styled.div`
   margin-bottom: 24px;
   display: flex;
   justify-content: space-between;
+
+  @media ${device.mobileL} {
+    margin-bottom: 16px;
+  }
 `;
 
 const Buttons = styled.div`
@@ -145,6 +172,28 @@ const ActionButton = styled.button<{ saveList?: boolean, upload?: boolean }>`
   
   & div {
     margin: 0 20px;
+    display: flex;
+  }
+
+  @media ${device.mobileL} {
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+`;
+
+const TopPagination = styled.div`
+  @media ${device.mobileL} {
+    display: none;
+  }
+`;
+
+const BottomPagination = styled.div`
+  display: none;
+  margin-top: 16px;
+  justify-content: center;
+
+  @media ${device.mobileL} {
     display: flex;
   }
 `;

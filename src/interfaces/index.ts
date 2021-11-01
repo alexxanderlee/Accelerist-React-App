@@ -1,5 +1,3 @@
-export type SortType = 'alphabet' | 'last-activity' | 'available';
-
 export interface IUser {
   id: string;
   email: string;

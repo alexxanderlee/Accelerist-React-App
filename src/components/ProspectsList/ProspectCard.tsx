@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
-import { Filters } from 'src/components';
+import { Filters, NoAvatar } from 'src/components';
 import { IProspect } from 'src/interfaces';
 
 interface ProspectCardProps {
@@ -13,7 +13,6 @@ const ProspectCard: React.FC<ProspectCardProps> = ({
   prospect: { id, name, filters, prospectsAvailable, lastAuthor, updatedAt },
 }) => {
   const lastActivity = dayjs(updatedAt).format('D MMM YYYY');
-  const firstChar = lastAuthor.email[0].toUpperCase();
 
   return (
     <Wrapper>
@@ -29,9 +28,7 @@ const ProspectCard: React.FC<ProspectCardProps> = ({
       </CounterBlock>
       <Footer>
         <UserBlock>
-          <Avatar>
-            <Char>{firstChar}</Char>
-          </Avatar>
+          <NoAvatar username={lastAuthor.email} />
           <div>
             <Username>{lastAuthor.email}</Username>
             <Text>{lastAuthor.role}</Text>

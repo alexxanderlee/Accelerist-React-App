@@ -1,11 +1,12 @@
 import axios from 'axios';
-import { IFilters, SortType } from 'src/interfaces';
+import { IFilters } from 'src/interfaces';
+import { SortTypes } from 'src/constants';
 
 const baseURL = 'https://accelerist.herokuapp.com';
 const getAccessToken = () => localStorage.getItem('token');
 
 export const savedListApi = {
-  getAllSavedLists: (page: number, limit: number, sort?: SortType) => axios({
+  getAllSavedLists: (page: number, limit: number, sort?: SortTypes) => axios({
     method: 'GET',
     url: `${baseURL}/api/v1/saved-list?page=${page}&limit=${limit}&sort=${sort}`,
     headers: { 'Authorization': `Bearer ${getAccessToken()}` },

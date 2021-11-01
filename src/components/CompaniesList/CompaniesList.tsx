@@ -5,23 +5,21 @@ import { emptyCompanySvg } from 'src/assets/icons';
 import { useAppDispatch } from 'src/state/hooks';
 import { companiesActions } from 'src/state/features/companies';
 import { ICompany } from 'src/interfaces';
+import device from 'src/constants/devices';
 
 interface CompaniesListProps {
   companies: ICompany[];
-  onLikeCallback?: () => void;
 }
 
-const CompaniesList: React.FC<CompaniesListProps> = ({ companies, onLikeCallback }) => {
+const CompaniesList: React.FC<CompaniesListProps> = ({ companies }) => {
   const dispatch = useAppDispatch();
 
-  function onDislike(id: string) {
-    dispatch(companiesActions.dislikeCompany(id))
-      .then(onLikeCallback);
+  function dislikeCompany(id: string) {
+    dispatch(companiesActions.dislikeCompany(id));
   }
 
-  function onLike(id: string) {
-    dispatch(companiesActions.likeCompany(id))
-      .then(onLikeCallback);
+  function likeCompany(id: string) {
+    dispatch(companiesActions.likeCompany(id));
   }
 
   return (
@@ -31,8 +29,8 @@ const CompaniesList: React.FC<CompaniesListProps> = ({ companies, onLikeCallback
           <CompanyCard
             key={company.id}
             company={company}
-            onDislike={() => onDislike(company.id)}
-            onLike={() => onLike(company.id)}
+            dislikeCompany={() => dislikeCompany(company.id)}
+            likeCompany={() => likeCompany(company.id)}
           />
         ))}
       </Grid>
@@ -49,6 +47,14 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 24px;
+
+  @media ${device.tabletXS} {
+    grid-template-columns: 1fr;
+  }
+
+  @media ${device.mobileL} {
+    grid-gap: 17px;
+  }
 `;
 
 const EmptyListWrapper = styled.div`

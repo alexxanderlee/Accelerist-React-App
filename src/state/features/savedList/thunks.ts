@@ -1,11 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { savedListApi } from './api';
 import { AxiosResponse, AxiosError } from 'axios';
-import { SortType, IProspect, MetaData, IFilters } from 'src/interfaces';
+import { IProspect, MetaData, IFilters } from 'src/interfaces';
+import { SortTypes } from 'src/constants';
 
 export const getSavedLists = createAsyncThunk<
   { items: IProspect[], meta: MetaData },
-  { page: number, limit: number, sort?: SortType },
+  { page: number, limit: number, sort?: SortTypes },
   { rejectValue: string }
 >('savedList/getSavedLists', async (data, { rejectWithValue }) => {
   try {

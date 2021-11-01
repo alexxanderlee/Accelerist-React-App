@@ -29,8 +29,8 @@ const LikeButton: React.FC<LikeButtonProps> = ({ liked, iconOnly = false, custom
 };
 
 const Button = styled.button<{ customStyle?: CSSProp, iconOnly?: boolean }>`
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   background-color: #FFFFFF;
   border: 1px solid #E8E8E8;
   border-radius: 6px;

@@ -2,11 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import queryString from 'query-string';
 import { useHistory } from 'react-router-dom';
-import { AppWrapper } from 'src/layouts';
-import { PageBar, Pagination, ProspectsList } from 'src/components';
+import { MainLayout } from 'src/layouts';
+import { Pagination, ProspectsList } from 'src/components';
 import { useAppDispatch, useAppSelector } from 'src/state/hooks';
 import { savedListActions, savedListSelectors } from 'src/state/features/savedList';
-import { IProspect, MetaData, SortType } from 'src/interfaces';
+import { IProspect, MetaData } from 'src/interfaces';
+import { SortTypes } from 'src/constants';
 
 const Prospects: React.FC = () => {
   const history = useHistory();
@@ -17,15 +18,15 @@ const Prospects: React.FC = () => {
   const isLoading: boolean = useAppSelector(savedListSelectors.isLoading);
 
   const { page } = queryString.parse(history.location.search);
-  const [sorting, setSorting] = React.useState<SortType>('alphabet');
+  const [sorting, setSorting] = React.useState<SortTypes>(SortTypes.Alphabet);
 
   React.useEffect(() => {
     dispatch(savedListActions.getSavedLists({ page: Number(page) || 1, limit: 12, sort: sorting }));
   }, [page, sorting]);
 
   return (
-    <AppWrapper
-      pageBar={<PageBar pageTitle="Prospecting Sessions" />}
+    <MainLayout
+      pageTitle="Prospecting Sessions"
       isLoading={isLoading}
     >
       <Root>
@@ -34,16 +35,16 @@ const Prospects: React.FC = () => {
             <SortToggler>
               <SortTogglerTitle>Sort by</SortTogglerTitle>
               <SortTogglerBtn
-                active={sorting === 'alphabet'}
-                onClick={() => setSorting('alphabet')}
+                active={sorting === SortTypes.Alphabet}
+                onClick={() => setSorting(SortTypes.Alphabet)}
               >Alphabet</SortTogglerBtn>
               <SortTogglerBtn
-                active={sorting === 'available'}
-                onClick={() => setSorting('available')}
+                active={sorting === SortTypes.Available}
+                onClick={() => setSorting(SortTypes.Available)}
               >Prospects Available</SortTogglerBtn>
               <SortTogglerBtn
-                active={sorting === 'last-activity'}
-                onClick={() => setSorting('last-activity')}
+                active={sorting === SortTypes.LastActivity}
+                onClick={() => setSorting(SortTypes.LastActivity)}
               >Last Activity</SortTogglerBtn>
             </SortToggler>
             <Pagination
@@ -56,7 +57,7 @@ const Prospects: React.FC = () => {
         )}
         <ProspectsList prospects={prospects} />
       </Root>
-    </AppWrapper>
+    </MainLayout>
   );
 };
 

@@ -2,9 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link, NavLink } from 'react-router-dom';
 import { logoDarkSvg } from 'src/assets/images';
-import { userSvg, searchSvg } from 'src/assets/icons';
+import { userSvg, searchSvg, MenuIcon, XIcon } from 'src/assets/icons';
 import { useAppDispatch, useAppSelector } from 'src/state/hooks';
 import { userActions, userSelectors } from 'src/state/features/user';
+import device from 'src/constants/devices';
 
 interface HeaderProps {
   searchInputVisible?: boolean;
@@ -13,8 +14,9 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ searchInputVisible = true }) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelectors.getUserData);
-  const [dropdownHidden, setDropdownHidden] = React.useState<boolean>(true);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
+  const [dropdownHidden, setDropdownHidden] = React.useState<boolean>(true);
+  const [isSideMenuVisible, setIsSideMenuVisible] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     function handleOutsideClick(event: MouseEvent) {
@@ -30,51 +32,71 @@ const Header: React.FC<HeaderProps> = ({ searchInputVisible = true }) => {
     };
   }, []);
 
+  React.useEffect(() => {
+    if (isSideMenuVisible) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isSideMenuVisible]);
+
   return (
     <StyledHeader>
       <Container>
         <Link to="/dashboard">
           <LogoImg src={logoDarkSvg} />
         </Link>
-        <Navigation>
-          <NavList>
-            <ListItem>
-              <StyledNavLink to="/dashboard">Dashboard</StyledNavLink>
-            </ListItem>
-            <ListItem>
-              <StyledNavLink to="/search">Search</StyledNavLink>
-            </ListItem>
-            <ListItem>
-              <StyledNavLink to="/prospects">Prospecting</StyledNavLink>
-            </ListItem>
-            <ListItem>
-              <StyledNavLink to="/favourites">Favourites</StyledNavLink>
-            </ListItem>
-          </NavList>
-        </Navigation>
-        {searchInputVisible && (
-          <SearchWrapper>
-            <SearchInput type="text" placeholder="Search" />
-            <SearchIcon src={searchSvg} />
-          </SearchWrapper>
-        )}
-        <User
-          onClick={() => setDropdownHidden(false)}
-          ref={dropdownRef}
-        >
-          <Avatar>
-            <UserIcon src={userSvg} />
-          </Avatar>
-          {user && <Username>{user.email}</Username>}
-          <Dropdown hidden={dropdownHidden}>
-            <DropdownItem>Profile</DropdownItem>
-            <DropdownItem>User Profile</DropdownItem>
-            <DropdownItem>Users</DropdownItem>
-            <DropdownItem red onClick={
-              () => dispatch(userActions.logout())
-            }>Log Out</DropdownItem>
-          </Dropdown>
-        </User>
+        <SideMenuBackground
+          isVisible={isSideMenuVisible}
+          onClick={() => setIsSideMenuVisible(false)}
+        />
+        <Menu isVisible={isSideMenuVisible}>
+          <CloseMenuBtn onClick={() => setIsSideMenuVisible(false)}>
+            <XIcon />
+          </CloseMenuBtn>
+          <Navigation>
+            <NavList>
+              <ListItem>
+                <StyledNavLink to="/dashboard">Dashboard</StyledNavLink>
+              </ListItem>
+              <ListItem>
+                <StyledNavLink to="/search">Search</StyledNavLink>
+              </ListItem>
+              <ListItem>
+                <StyledNavLink to="/prospects">Prospecting</StyledNavLink>
+              </ListItem>
+              <ListItem>
+                <StyledNavLink to="/favourites">Favourites</StyledNavLink>
+              </ListItem>
+            </NavList>
+          </Navigation>
+          {searchInputVisible && (
+            <SearchWrapper>
+              <SearchInput type="text" placeholder="Search" />
+              <SearchIcon src={searchSvg} />
+            </SearchWrapper>
+          )}
+          <User
+            onClick={() => setDropdownHidden(false)}
+            ref={dropdownRef}
+          >
+            <Avatar>
+              <UserIcon src={userSvg} />
+            </Avatar>
+            {user && <Username>{user.email}</Username>}
+            <Dropdown hidden={dropdownHidden}>
+              <DropdownItem>Profile</DropdownItem>
+              <DropdownItem>User Profile</DropdownItem>
+              <DropdownItem>Users</DropdownItem>
+              <DropdownItem red onClick={
+                () => dispatch(userActions.logout())
+              }>Log Out</DropdownItem>
+            </Dropdown>
+          </User>
+        </Menu>
+        <Hamburger onClick={() => setIsSideMenuVisible(true)}>
+          <MenuIcon />
+        </Hamburger>
       </Container>
     </StyledHeader>
   );
@@ -83,6 +105,10 @@ const Header: React.FC<HeaderProps> = ({ searchInputVisible = true }) => {
 const StyledHeader = styled.header`
   height: 80px;
   background-color: #D5F3FF;
+
+  @media ${device.mobileM} {
+    height: 74px;
+  }
 `;
 
 const Container = styled.div`
@@ -93,10 +119,84 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media ${device.tablet} {
+    padding: 0 32px;
+  }
+
+  @media ${device.mobileM} {
+    padding: 0 16px;
+  }
 `;
 
 const LogoImg = styled.img`
   margin-right: 50px;
+  
+  @media ${device.mobileM} {
+    height: 30px;
+  }
+`;
+
+const SideMenuBackground = styled.div<{ isVisible?: boolean }>`
+  @media ${device.tablet} {
+    display: ${props => props.isVisible ? 'block' : 'none'};
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 98;
+    transition: display 0.2s;
+  }
+
+  @media ${device.mobileM} {
+    display: none;
+  }
+`;
+
+const Menu = styled.div<{ isVisible?: boolean }>`
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: right 0.2s;
+
+  @media ${device.tablet} {
+    padding: 132px 40px 32px 40px;
+    position: fixed;
+    top: 0;
+    right: ${props => props.isVisible ? 0 : '-330px'};
+    width: 330px;
+    height: 100%;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 99;
+  }
+
+  @media ${device.mobileM} {
+    width: 100%;
+    right: ${props => props.isVisible ? 0 : '-100%'};
+  }
+`;
+
+const CloseMenuBtn = styled.div`
+  display: none;
+  position: absolute;
+  top: 28px;
+  right: 32px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.6;
+  }
+
+  @media ${device.tablet} {
+    display: block;
+  }
 `;
 
 const Navigation = styled.nav`
@@ -108,6 +208,11 @@ const NavList = styled.ul`
   margin-right: 45px;
   list-style: none;
   display: flex;
+
+  @media ${device.tablet} {
+    flex-direction: column;
+    margin: 0;
+  }
 `;
 
 const ListItem = styled.li`
@@ -117,6 +222,12 @@ const ListItem = styled.li`
 
   &:last-child {
     margin-right: 0;
+  }
+
+  @media ${device.tablet} {
+    &:not(:last-child) {
+      margin-bottom: 32px;
+    }
   }
 `;
 
@@ -137,12 +248,20 @@ const StyledNavLink = styled(NavLink)`
   &.active {
     font-weight: 500;
   }
+
+  @media ${device.tablet} {
+    font-size: 16px;
+  }
 `;
 
 const SearchWrapper = styled.div`
   position: relative;
   margin-right: 40px;
   flex-basis: 365px;
+
+  @media ${device.laptopM} {
+    display: none;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -183,6 +302,10 @@ const User = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
+
+  @media ${device.laptop} {
+    min-width: 160px;
+  }
 `;
 
 const Avatar = styled.div`
@@ -195,6 +318,10 @@ const Avatar = styled.div`
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+
+  @media ${device.tablet} {
+    border: 1px solid #dbdbdb;
+  }
 `;
 
 const UserIcon = styled.img`
@@ -203,12 +330,17 @@ const UserIcon = styled.img`
 `;
 
 const Username = styled.p`
+  margin: 0;
   font-family: 'Rubik', sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 150%;
   color: #122434;
   white-space: nowrap;
+
+  @media ${device.tablet} {
+    font-size: 16px;
+  }
 `;
 
 const Dropdown = styled.div<{ hidden?: boolean }>`
@@ -222,7 +354,17 @@ const Dropdown = styled.div<{ hidden?: boolean }>`
   box-shadow: 0px 2px 20px rgba(40, 31, 61, 0.04);
   border-radius: 6px;
   cursor: default;
-  z-index: 99;
+  z-index: 100;
+
+  @media ${device.laptop} {
+    min-width: 150px;
+  }
+
+  @media ${device.tablet} {
+    top: unset;
+    bottom: 50px;
+    box-shadow: 0px 2px 20px rgba(40, 31, 61, 0.1);
+  }
 `;
 
 const DropdownItem = styled.div<{ red?: boolean }>`
@@ -237,6 +379,28 @@ const DropdownItem = styled.div<{ red?: boolean }>`
 
   &:hover {
     background-color: #f8f8f8;
+  }
+
+  @media ${device.tablet} {
+    font-size: 14px;
+  }
+`;
+
+const Hamburger = styled.div`
+  display: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.6;
+  }
+
+  @media ${device.tablet} {
+    display: block;
+  }
+
+  @media ${device.mobileM} {
+    display: block;
   }
 `;
 
